@@ -11,7 +11,7 @@ void initSDL();
 void initSDLttf();
 void initSDLimage();
 
-void verrificationErreurFenetre(SDL_Window* window);
-void verrificationErreurRenderer(SDL_Renderer* rendererWindow);
+void verificationErreurFenetre(SDL_Window* window);
+void verificationErreurRenderer(SDL_Renderer* rendererWindow);
 
 void finLibrairies();

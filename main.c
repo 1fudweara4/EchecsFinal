@@ -9,9 +9,9 @@ int main(int argc, char* args[]){
 
     initialisationSDL();
     window=SDL_CreateWindow("Jeu d'echecs", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    verrificationErreurFenetre(window);
+    verificationErreurFenetre(window);
     rendererWindow = SDL_CreateRenderer(window,-1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    verrificationErreurRenderer(rendererWindow);
+    verificationErreurRenderer(rendererWindow);
 
     menuPrincipal(rendererWindow);
 
@@ -61,7 +61,7 @@ void initSDLimage(){
     }
 }
 
-void verrificationErreurFenetre(SDL_Window* window){ // Vérification erreur Fenetre
+void verificationErreurFenetre(SDL_Window* window){ // Vérification erreur Fenetre
 
     if( window == NULL ){
         printf("La fenetre n'a pas pu être créee. SDL_Error: %s\n",SDL_GetError());
@@ -73,7 +73,7 @@ void verrificationErreurFenetre(SDL_Window* window){ // Vérification erreur Fen
     SDL_Delay(100);
 }
 
-void verrificationErreurRenderer(SDL_Renderer* rendererWindow){ //Verification erreur renderer
+void verificationErreurRenderer(SDL_Renderer* rendererWindow){ //Verification erreur renderer
 
     if(rendererWindow == NULL){
         printf("Erreur lors de la creation d'un renderer : %s\n",SDL_GetError());

@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1491663283 source:/home/fudweara/EchecsFinal/main.c
+1492088777 source:/home/fudweara/EchecsFinal/main.c
 	"header/main.h"
 
-1491663181 /home/fudweara/EchecsFinal/header/main.h
+1492088777 /home/fudweara/EchecsFinal/header/main.h
 	<stdio.h>
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>

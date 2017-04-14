@@ -183,14 +183,16 @@ void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],str
 
     while(!Quitter){
         for(i=0;i<2;i++){
-            Quitter=deroulementDuTour(rendererWindow,emplacementPions,Nom,i,&causeFin);
+            deroulementDuTour(rendererWindow,emplacementPions,Nom,i,&causeFin);
+            Quitter=verificationConditionFin(&causeFin, emplacementPions);
         }
     }
+    issuePartie(rendererWindow,causeFin);
     /** METTRE ICI LA FONCTION POUR GERER LES ISSUES POSSIBLES DE LA PARTIE **/
 }
 
-int deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin){
-    int Quitter=0; //Chnager pour mettre à 0 quand la vérificationcondition fin est faite
+void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin){
+    //int Quitter; //Chnager pour mettre à 0 quand la vérificationcondition fin est faite
 
     if(*causeFin==0){
             if(strcmp(&Nom[joueurQuiJoue].Nom[0],"")==0){
@@ -200,11 +202,8 @@ int deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],st
             else{
                 printf("Joueur 'réel' qui joue\n");
                 actionDuJoueur(rendererWindow,emplacementPions,joueurQuiJoue,causeFin);
-                //Quitter=verificationConditionFin ( modifier *causeFin si il n'y a plus de pions )
-
             }
     }
-    return Quitter;
 }
 
 void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin){
@@ -219,6 +218,7 @@ void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
             switch(event.type){
                 case SDL_WINDOWEVENT:
                     if ( event.window.event == SDL_WINDOWEVENT_CLOSE ){
+                          *causeFin=2;
                           Quitter=1;
                     }
                     break;
@@ -227,7 +227,7 @@ void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
                     break;
                 case SDL_KEYUP:
                     if ( event.key.keysym.sym == SDLK_ESCAPE ){
-                        Quitter=1; // Mettre après affichage menu avec demande de sauvegarde etc...
+                        //Quitter=1; // Mettre après affichage menu avec demande de sauvegarde etc...
                     }
                     break;
             }
@@ -245,11 +245,13 @@ int actionPremierCLique(SDL_Renderer* rendererWindow,int emplacementPions[8][8],
         generationPropositionDeplacement(emplacementPions,positionDansEchiquier,propositionDeplacement,joueurQuiJoue);
         if(verificationSiIlyaPossibilites(propositionDeplacement)){
         affichagePropositionDeplacement(rendererWindow,propositionDeplacement);
-        Quitter=actionsDeplacement(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue);
-        SuppressionPropositionsDeplacement(rendererWindow,propositionDeplacement);
+        Quitter=actionsDeplacement(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue,causeFin);
+        SuppressionPropositionsDeplacement(rendererWindow,propositionDeplacement,emplacementPions);
         }
         if(Quitter==1){
-            deplacementPion(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier);
+            deplacementPion(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue);
+            affichageNombreDePions(rendererWindow,emplacementPions);
+            SDL_RenderPresent(rendererWindow);
         }
     }
     return Quitter;
@@ -327,9 +329,9 @@ int verificationSiIlyaPossibilites(struct coordonnees propositionDeplacement[3])
     return possibiliteExistante;
 }
 
-int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier,int joueurQuiJoue){
+int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier,int joueurQuiJoue, int* causeFin){
     SDL_Event event;
-    int Quitter,Quitter1=0;
+    int Quitter=0,Quitter1=0;
     Uint32 Timer;
 
     while(!Quitter1){
@@ -339,6 +341,19 @@ int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],
                 case SDL_MOUSEBUTTONUP:
                     Quitter=evenementCliqueDemandeProposition(rendererWindow, emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue);
                     Quitter1=1;
+                    break;
+
+                case SDL_WINDOWEVENT:
+                    if(event.window.event == SDL_WINDOWEVENT_CLOSE){
+                        Quitter1=1;
+                        Quitter=1;
+                        *causeFin=2;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    if(event.key.keysym.sym == SDLK_ESCAPE){
+                        Quitter1=1;
+                    }
                     break;
             }
         }
@@ -367,22 +382,62 @@ int evenementCliqueDemandeProposition(SDL_Renderer* rendererWindow, int emplacem
     return Quitter;
 }
 
-void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3]){
+void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3],int emplacementPions[8][8]){
     int i;
     for(i=0;i<3;i++){
         if(propositionDeplacement[i].x!=-1){
             affichageCaseCouleurEnFonctionPosition(rendererWindow,propositionDeplacement[i].x,propositionDeplacement[i].y);
+            affichagePions(rendererWindow,emplacementPions,propositionDeplacement[i].x,propositionDeplacement[i].y);
         }
     }
     SDL_RenderPresent(rendererWindow);
 }
 
-void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier){
-    int i;
+void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier, int joueurQuiJoue){
+    int i, emplacementFinalPion;
     for(i=0;i<3;i++){
         affichagePions(rendererWindow,emplacementPions,propositionDeplacement[i].x,propositionDeplacement[i].y);
+        if(emplacementPions[propositionDeplacement[i].y][propositionDeplacement[i].x]==joueurQuiJoue+(joueurQuiJoue-1)){
+            emplacementFinalPion=i;
+        }
     }
     affichageCaseCouleurEnFonctionPosition(rendererWindow,positionDansEchiquier.x,positionDansEchiquier.y);
     affichagePions(rendererWindow,emplacementPions,positionDansEchiquier.x,positionDansEchiquier.y);
-    SDL_RenderPresent(rendererWindow);
+}
+
+
+int verificationConditionFin (int* causeFin, int emplacementPions[8][8]){
+    int Quitter=0;
+
+    int i;
+    for(i=0;i<8;i++){
+        if(emplacementPions[0][i]==-1 || compterNbPions(emplacementPions,1)==0){
+            *causeFin=-1;
+            Quitter=1;
+        }
+        if(emplacementPions[7][i]==1 || compterNbPions(emplacementPions,-1)==0){
+            *causeFin=1;
+            Quitter=1;
+        }
+    }
+    // Faire cas égalités
+    if(*causeFin==2){
+        Quitter=1;
+    }
+
+    return Quitter;
+}
+
+void issuePartie(SDL_Renderer* rendererWindow,int causeFin){
+    switch(causeFin){
+        case -1:
+            printf("\nJoueur blanc qui gagne\n");
+            break;
+        case 1:
+            printf("\nJoueur noir qui gagne\n");
+            break;
+        case 2:
+            printf("\nAppuie sur la croix fin du programme\n");
+            break;
+    }
 }

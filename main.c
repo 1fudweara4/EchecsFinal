@@ -30,7 +30,7 @@ void initialisationSDL(){ //Initialisation SDL + extensions TTF et image
     initSDLimage();
 }
 
-void initSDL(){
+void initSDL(){ // Init SDL
 
     if(SDL_Init(SDL_INIT_VIDEO)<0) {
 		printf("SDL n'a pas reussi à se lancer. SDL_Error: %s\n", SDL_GetError());
@@ -40,7 +40,7 @@ void initSDL(){
     }
 }
 
-void initSDLttf(){
+void initSDLttf(){ //Init SDL true type font
 
     if(TTF_Init()==-1){
         printf("Erreur lors de l'initialisation de SDL_ttf. SDL_ttf Error: %s\n",TTF_GetError());
@@ -50,7 +50,7 @@ void initSDLttf(){
     }
 }
 
-void initSDLimage(){
+void initSDLimage(){ //Init SDL image
     int imgFlags = IMG_INIT_PNG;
 
     if(!(IMG_Init(IMG_INIT_PNG)) && & imgFlags){

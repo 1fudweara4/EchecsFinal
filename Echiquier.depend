@@ -27,12 +27,12 @@
 1491834847 source:/home/fudweara/EchecsFinal/outils.c
 	"header/outils.h"
 
-1492045345 source:/home/fudweara/EchecsFinal/echiquier.c
+1492176633 source:/home/fudweara/EchecsFinal/echiquier.c
 	"header/outils.h"
 	"header/menus.h"
 	"header/echiquier.h"
 
-1492045280 /home/fudweara/EchecsFinal/header/echiquier.h
+1492176037 /home/fudweara/EchecsFinal/header/echiquier.h
 	<stdio.h>
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>

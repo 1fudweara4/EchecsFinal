@@ -1,7 +1,7 @@
 #include"header/menus.h"
 #include"header/outils.h"
 
-void menuPrincipal(SDL_Renderer* rendererWindow){
+void menuPrincipal(SDL_Renderer* rendererWindow){ // Menu principal : affichage graphique puis actions
     int Action;
     SDL_Rect CaractBoutton[3];
 
@@ -12,7 +12,7 @@ void menuPrincipal(SDL_Renderer* rendererWindow){
     issueMenuPrincipal(rendererWindow,Action);
 }
 
-void remplirCaractTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){
+void remplirCaractTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){ // rempli caractéristiques pour 3 boutons
     int i;
     struct coordonnees tailleFenetre;
 
@@ -26,7 +26,7 @@ void remplirCaractTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBo
     }
 }
 
-void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton){
+void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton){ //Affichage des 3 bouttons dans menu principal
 
     mettreFondEcranUni(rendererWindow);
 
@@ -36,7 +36,7 @@ void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton
     SDL_RenderPresent(rendererWindow);
 }
 
-int evenementMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){
+int evenementMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){ // Attente de clique sur l'un des trois bouttons
     int Quitter=0, Action=0;
     SDL_Event event;
     Uint32 Timer;
@@ -63,7 +63,7 @@ int evenementMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBou
     return Action;
 }
 
-int actionEnFonctionCliqueMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){
+int actionEnFonctionCliqueMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){ // Si clique alors remplir variable Action avec le numéro du bouton
     struct coordonnees positionSouris;
     int i,action=0;
 
@@ -78,7 +78,7 @@ int actionEnFonctionCliqueMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Re
     return action;
 }
 
-void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action){
+void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action){ // Issue du menu en fonction du boutton cliqué
     switch(Action){
     case 1:
         printf("Appuie sur le boutton Jouer\n\n");

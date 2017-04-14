@@ -30,7 +30,7 @@ int compterNbPions(int emplacementPions[8][8],int Couleur);
 void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]);
 void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin);
 
-void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin);
+void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin,struct Pseudo Nom[2]);
 int actionPremierCLique(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin);
 
 struct coordonnees detectionEmplacementDuCliqueDansEchiquier();
@@ -43,5 +43,10 @@ int evenementCliqueDemandeProposition(SDL_Renderer* rendererWindow, int emplacem
 void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3], int emplacementPions[8][8]);
 void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier, int joueurQuiJoue);
 
-int verificationConditionFin (int* causeFin, int emplacementPions[8][8]);
+int verificationConditionFin (int* causeFin, int emplacementPions[8][8],int joueurQuiJoue);
 void issuePartie(SDL_Renderer* rendererWindow,int causeFin);
+int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue);
+
+int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2], int* causeFin);
+void affichageMenuSauvegarder(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
+int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2],int action,int* causeFin);

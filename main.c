@@ -1,4 +1,5 @@
 #include "header/main.h"
+#include"header/menus.h"
 
 int main(int argc, char* args[]){
 
@@ -53,7 +54,7 @@ void initSDLttf(){ //Init SDL true type font
 void initSDLimage(){ //Init SDL image
     int imgFlags = IMG_INIT_PNG;
 
-    if(!(IMG_Init(IMG_INIT_PNG)) && & imgFlags){
+    if(!(IMG_Init(IMG_INIT_PNG)) && imgFlags){
         printf("Erreur lors de l'initialisation de SDL_image. SDL_image Error: %s\n",TTF_GetError());
     }
     else{

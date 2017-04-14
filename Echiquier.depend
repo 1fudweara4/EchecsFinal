@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1492088777 source:/home/fudweara/EchecsFinal/main.c
+1492184895 source:/home/fudweara/EchecsFinal/main.c
 	"header/main.h"
+	"header/menus.h"
 
 1492088777 /home/fudweara/EchecsFinal/header/main.h
 	<stdio.h>
@@ -8,7 +9,7 @@
 	<SDL2/SDL_ttf.h>
 	<SDL2/SDL_image.h>
 
-1491755468 source:/home/fudweara/EchecsFinal/menus.c
+1492184448 source:/home/fudweara/EchecsFinal/menus.c
 	"header/menus.h"
 	"header/outils.h"
 
@@ -27,12 +28,12 @@
 1491834847 source:/home/fudweara/EchecsFinal/outils.c
 	"header/outils.h"
 
-1492176633 source:/home/fudweara/EchecsFinal/echiquier.c
+1492190975 source:/home/fudweara/EchecsFinal/echiquier.c
 	"header/outils.h"
 	"header/menus.h"
 	"header/echiquier.h"
 
-1492176037 /home/fudweara/EchecsFinal/header/echiquier.h
+1492190887 /home/fudweara/EchecsFinal/header/echiquier.h
 	<stdio.h>
 	<SDL2/SDL.h>
 	<SDL2/SDL_ttf.h>

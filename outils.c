@@ -36,7 +36,6 @@ void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){
         SDL_RenderCopy(rendererWindow,textureTexte,NULL ,&CaractSurface);
 
         printf("Boutton %s fait\n",Texte);
-
     }
     else{
         printf("Texte non défini, erreur!\n");
@@ -45,6 +44,9 @@ void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){
     SDL_FreeSurface(SurfaceText);
     TTF_CloseFont(Police);
     SDL_DestroyTexture(textureTexte);
+    SurfaceText=NULL;
+    Police=NULL;
+    textureTexte=NULL;
 }
 
 void affichageImageBMP(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char* NomImage){
@@ -60,7 +62,8 @@ void affichageImageBMP(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char
 
         SDL_DestroyTexture(TextureImage);
         SDL_FreeSurface(Surface);
-
+        Surface=NULL;
+        TextureImage=NULL;
         printf("Affichage %s : ok\n", NomImage);
     }
     else{
@@ -79,7 +82,9 @@ void affichageImagePNG(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char
         TextureImage = SDL_CreateTextureFromSurface(rendererWindow, imageChargee);
         SDL_RenderCopy(rendererWindow,TextureImage,NULL,&CaractSurface);
         SDL_DestroyTexture(TextureImage);
+        TextureImage=NULL;
         SDL_FreeSurface(imageChargee);
+        imageChargee=NULL;
         printf("Affichage %s : ok\n", NomImage);
     }
 }

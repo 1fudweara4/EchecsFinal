@@ -7,8 +7,7 @@ Patchnotes:
 -0.1 : Version fonctionnelle du jeu, le premier au bout du damier a gagné, mode deux joueurs seulement.
 
 Fonctionnalités à venir:
-	- Menu Statistiques (3)
-	- Jeu un joueur face à un ordinateur (4)
-	- Possibilités de sauvegarder les parties et de les reprendre (2)
-	- Gestion des cas d'égalités (1)
+	- Menu Statistiques (2)
+	- Jeu un joueur face à un ordinateur (3)
+	- Possibilités de sauvegarder les parties et de les reprendre (1)
 	- Autres ajouts surprises...

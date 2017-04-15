@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -11,6 +12,12 @@ struct coordonnees{
 
 struct Pseudo{
     char Nom[10];
+};
+
+struct Sauvegarde{
+    int emplacementPions[8][8];
+    struct Pseudo Nom[2];
+    int tourJoueur;
 };
 
 void menuPrincipal(SDL_Renderer* rendererWindow);

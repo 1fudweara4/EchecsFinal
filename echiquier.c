@@ -179,20 +179,18 @@ int compterNbPions(int emplacementPions[8][8],int Couleur){
 
 
 void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]){
-    int i,Quitter=0,causeFin=0;
+    int i,Quitter=0,causeFin=0, dernierJoueurQuiAjoue;;
 
     while(!Quitter){
         for(i=0;i<2;i++){
-            deroulementDuTour(rendererWindow,emplacementPions,Nom,i,&causeFin);
+            deroulementDuTour(rendererWindow,emplacementPions,Nom,i,&causeFin,&dernierJoueurQuiAjoue);
             Quitter=verificationConditionFin(&causeFin, emplacementPions,i);
         }
     }
-    issuePartie(rendererWindow,causeFin);
-    /** METTRE ICI LA FONCTION POUR GERER LES ISSUES POSSIBLES DE LA PARTIE **/
+    issuePartie(rendererWindow,causeFin,emplacementPions,Nom,dernierJoueurQuiAjoue);
 }
 
-void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin){
-    //int Quitter; //Chnager pour mettre à 0 quand la vérificationcondition fin est faite
+void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin,int* dernierJoueurQuiAjoue){
 
     if(*causeFin==0){
             if(strcmp(&Nom[joueurQuiJoue].Nom[0],"")==0){
@@ -202,6 +200,7 @@ void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],s
             else{
                 printf("Joueur 'réel' qui joue\n");
                 actionDuJoueur(rendererWindow,emplacementPions,joueurQuiJoue,causeFin,Nom);
+                *dernierJoueurQuiAjoue=joueurQuiJoue;
             }
     }
 }
@@ -227,7 +226,6 @@ void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
                     break;
                 case SDL_KEYUP:
                     if ( event.key.keysym.sym == SDLK_ESCAPE ){
-                        //Quitter=1; // Mettre après affichage menu avec demande de sauvegarde etc...
                         Quitter=menuSauvegarder(rendererWindow,emplacementPions,Nom, causeFin);
                     }
                     break;
@@ -430,7 +428,7 @@ int verificationConditionFin (int* causeFin, int emplacementPions[8][8],int joue
     return Quitter;
 }
 
-void issuePartie(SDL_Renderer* rendererWindow,int causeFin){
+void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[8][8],struct Pseudo Nom[2],int dernierJoueurQuiAjoue){ //Ajouter beaucoup de paramètres
     switch(causeFin){
         case -1:
             printf("\nJoueur blanc qui gagne\n");
@@ -446,7 +444,7 @@ void issuePartie(SDL_Renderer* rendererWindow,int causeFin){
             break;
         case 4:
             printf("\nSauvegarder et retour menu principal\n");
-            //FonctionSauvegarder
+            sauvegardePartie(emplacementPions,Nom,dernierJoueurQuiAjoue);
             menuPrincipal(rendererWindow);
             break;
         case 5:
@@ -487,6 +485,7 @@ int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], str
     affichageMenuSauvegarder(rendererWindow,CaractBoutton);
     action=evenementMenuTroisBouttons(rendererWindow,CaractBoutton);
     Quitter=issueMenuSauvegarder(rendererWindow,emplacementPions,Nom, action, causeFin);
+
     return Quitter;
 }
 
@@ -527,4 +526,24 @@ int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8]
         break;
     }
     return Quitter;
+}
+
+
+
+void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue){
+    struct Sauvegarde Partie;
+    int i,j;
+    FILE* fichier=fopen("DAT/sauvegarde.dat","a");
+
+    for(i=0;i<8;i++){
+        for(j=0;j<8;j++){
+            Partie.emplacementPions[i][j]=emplacementPions[i][j];
+        }
+    }
+    strcpy(Nom[0].Nom,Partie.Nom[0].Nom);
+    strcpy(Nom[1].Nom,Partie.Nom[1].Nom);
+    Partie.tourJoueur=JoueurQuiJoue;
+
+    fwrite(&Partie,sizeof(struct Sauvegarde),1,fichier);
+    fclose(fichier);
 }

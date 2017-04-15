@@ -1,5 +1,6 @@
 #include"header/menus.h"
 #include"header/outils.h"
+#include "header/echiquier.h"
 
 void menuPrincipal(SDL_Renderer* rendererWindow){ // Menu principal : affichage graphique puis actions
     int Action;

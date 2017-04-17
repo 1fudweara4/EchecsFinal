@@ -522,7 +522,7 @@ void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques sta
     mettreFondEcranUni(rendererWindow);
 
     for(i=0;i<5;i++){
-        if(strcmp(stats[i].Pseudo,"")!=0){
+        if(strcmp(top[i].Pseudo,"")!=0){
             sprintf(texte,"%d. %s   %d/%d",i+1,top[i].Pseudo, top[i].NombreVictoireDefaite[0],top[i].NombreVictoireDefaite[1]);
             affichageTexte(rendererWindow,texte,50,caractGraphisme[i+2]);
             printf("%s avec %d win(s)\n",top[i].Pseudo, top[i].NombreVictoireDefaite[0]);
@@ -546,14 +546,15 @@ void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caract
 
 }
 
-void remplirTop5(struct Statistiques stats[50],struct Statistiques top[10]){
+void remplirTop5(struct Statistiques stats[50],struct Statistiques top[5]){
     int i,j;
     for(j=0;j<5;j++){
         for(i=0;i<50;i++){
-            if(strcmp(stats[i].Pseudo,"")!=0 && stats[i].NombreVictoireDefaite[0]>top[i].NombreVictoireDefaite[0]){
-                top[i].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0];
-                top[i].NombreVictoireDefaite[1]=stats[i].NombreVictoireDefaite[1];
-                strcpy(top[i].Pseudo,stats[i].Pseudo);
+            if(strcmp(stats[i].Pseudo,"")!=0 && stats[i].NombreVictoireDefaite[0]>top[j].NombreVictoireDefaite[0]){
+                top[j].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0];
+                top[j].NombreVictoireDefaite[1]=stats[i].NombreVictoireDefaite[1];
+                strcpy(top[j].Pseudo,stats[i].Pseudo);
+                strcpy(stats[i].Pseudo,"");
             }
         }
     }

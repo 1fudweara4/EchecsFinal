@@ -48,5 +48,5 @@ void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int Joue
 
 int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree);
 
-void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant);
-void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,struct Pseudo Nom[2]);
+void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant, int joueurPerdant);
+void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2]);

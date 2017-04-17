@@ -10,7 +10,7 @@
 	<SDL2/SDL_ttf.h>
 	<SDL2/SDL_image.h>
 
-1492448755 source:/home/fudweara/EchecsFinal/menus.c
+1492453976 source:/home/fudweara/EchecsFinal/menus.c
 	"header/menus.h"
 	"header/outils.h"
 	"header/echiquier.h"
@@ -32,12 +32,12 @@
 1492258650 source:/home/fudweara/EchecsFinal/outils.c
 	"header/outils.h"
 
-1492449124 source:/home/fudweara/EchecsFinal/echiquier.c
+1492459306 source:/home/fudweara/EchecsFinal/echiquier.c
 	"header/outils.h"
 	"header/menus.h"
 	"header/echiquier.h"
 
-1492448700 /home/fudweara/EchecsFinal/header/echiquier.h
+1492456319 /home/fudweara/EchecsFinal/header/echiquier.h
 	<stdio.h>
 	<stdlib.h>
 	<SDL2/SDL.h>

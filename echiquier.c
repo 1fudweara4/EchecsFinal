@@ -452,9 +452,11 @@ void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[
     switch(causeFin){
         case -1:
             printf("\nJoueur blanc qui gagne\n");
+            ajouterVictoireDefaiteAStatistiques(Nom,0);
             break;
         case 1:
             printf("\nJoueur noir qui gagne\n");
+            ajouterVictoireDefaiteAStatistiques(Nom,1);
             break;
         case 2:
             printf("\nAppuie sur la croix fin du programme\n");
@@ -579,4 +581,56 @@ int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree){
     fclose(fichierTour);
 
     return TourSuplementaire;
+}
+
+
+void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant){
+    FILE* fichierStats=fopen("DAT/stat.dat","rb");
+    struct Statistiques stats[50]={NULL};
+    int tailleSauv=0;
+
+    if(fichierStats!=NULL){
+        while( fread(&stats[tailleSauv],sizeof(struct Statistiques),1,fichierStats) && !feof(fichierStats)){
+            tailleSauv++;
+        }
+        fclose(fichierStats);
+    }
+    fichierStats=fopen("DAT/stat.dat","wb+");
+    mettreNomEtVictoireDansTableau(stats,joueurGagnant,Nom);
+    fwrite(stats,sizeof(struct Statistiques),50,fichierStats);
+    fclose(fichierStats);
+}
+
+void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,struct Pseudo Nom[2]){
+    int i,j,correspondance[2]={0,0};
+
+    for(i=0;i<50;i++){
+        if(strcmp(Nom[joueurGagnant].Nom,"")!=0 && strcmp(stats[i].Pseudo,Nom[joueurGagnant].Nom)==0){
+            stats[i].NombreVictoireDefaite[0]++;
+            printf("%s a %d victoires\n",stats[i].Pseudo,stats[i].NombreVictoireDefaite[0]);
+            correspondance[0]=1;
+        }
+        if(strcmp(Nom[1-joueurGagnant].Nom,"")!=0 && strcmp(stats[i].Pseudo,Nom[1-joueurGagnant].Nom)==0){
+            stats[i].NombreVictoireDefaite[1]++;
+            printf("%s a %d défaites\n",stats[i].Pseudo,stats[i].NombreVictoireDefaite[1]);
+            correspondance[1]=1;
+        }
+    }
+    for(i=0;i<2;i++){
+        if(correspondance[i]==0){
+            for(j=0;j<50;j++){
+                if(strcmp(stats[j].Pseudo,"")==0 && strcmp(&Nom[i].Nom[0],"")!=0){
+                    strcpy(stats[j].Pseudo,Nom[i].Nom);
+                    if(i==joueurGagnant){
+                        stats[j].NombreVictoireDefaite[0]=1;
+                    }
+                    else{
+                        stats[j].NombreVictoireDefaite[1]=1;
+                    }
+                    printf("Ajout %s avec %d et %d win/loose\n",stats[j].Pseudo,stats[j].NombreVictoireDefaite[0],stats[j].NombreVictoireDefaite[1]);
+                    break;
+                }
+            }
+        }
+    }
 }

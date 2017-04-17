@@ -4,21 +4,13 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
-/*
-struct coordonnees{
-    int x;
-    int y;
-};*/
-
 struct Pseudo{
     char Nom[10];
 };
 
-struct Sauvegarde{
-    int emplacementPions[64];
-    int tourJoueur;
-    struct Pseudo Nom[2];
-
+struct Statistiques{
+   char Pseudo[10];
+   int NombreVictoireDefaite[2];
 };
 
 void menuPrincipal(SDL_Renderer* rendererWindow);
@@ -57,3 +49,11 @@ int actionMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutt
 int actionEnFonctionCliqueMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,int nombrePartie);
 void issueMenuReprendrePartie(SDL_Renderer* rendererWindow,int action, struct Pseudo Nom[2]);
 void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie);
+
+void menuStatistiques(SDL_Renderer* rendererWindow);
+void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caractGraphisme[6]);
+void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques stats[50],SDL_Rect caractGraphisme[6]);
+void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caractGraphisme[6]);
+void remplirTop5(struct Statistiques stats[50],struct Statistiques top[10]);
+int actionMenuStatistiques(SDL_Renderer* rendererWindow,SDL_Rect caractGraphismes[6]);
+void issueMenuStatistiques(SDL_Renderer* rendererWindow, int action);

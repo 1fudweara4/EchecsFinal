@@ -87,6 +87,7 @@ void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action){ // Issue du m
         break;
     case 2:
         printf("Appuie sur le boutton Statistiques\n\n");
+        menuStatistiques(rendererWindow);
         break;
     case 3:
         printf("Appuie sur le boutton Quitter\n\n");
@@ -471,4 +472,131 @@ void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie){
     fseek(fichier, sizeof(struct Pseudo)*2*(nombrePartie-1), SEEK_SET);
     fread(Nom,sizeof(struct Pseudo),2,fichier);
     printf("%s\n\n",Nom[1].Nom);
+}
+
+
+
+void menuStatistiques(SDL_Renderer* rendererWindow){
+    FILE* fichierStat=fopen("DAT/stat.dat","rb");
+    struct Statistiques stats[50]={NULL};
+    int action;
+    SDL_Rect caractGraphisme[7];
+    remplirCaractMenuStatistiques(rendererWindow,caractGraphisme);
+
+    if(fichierStat!=NULL){
+
+        fread(stats,sizeof(struct Statistiques),50,fichierStat);
+
+        affichageTop5Victoire(rendererWindow, stats,caractGraphisme);
+        fclose(fichierStat);
+    }
+    else{
+        affichageStatQuandPasDeFichier(rendererWindow,caractGraphisme);
+    }
+    action=actionMenuStatistiques(rendererWindow,caractGraphisme);
+    issueMenuStatistiques(rendererWindow,action);
+}
+
+void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caractGraphisme[6]){
+    int i;
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    for(i=1;i<7;i++){
+            caractGraphisme[i].x=tailleFenetre.x/2;
+            caractGraphisme[i].y=tailleFenetre.y/10*(i)+tailleFenetre.y/10/3*(i);
+    }
+    caractGraphisme[0].x=tailleFenetre.x-150;
+    caractGraphisme[0].y=tailleFenetre.y-100;
+    caractGraphisme[0].w=100;
+    caractGraphisme[0].h=50;
+
+}
+
+void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques stats[50],SDL_Rect caractGraphisme[6]){
+    struct Statistiques top[5]={NULL};
+    int i;
+    char texte[50];
+
+    remplirTop5(stats,top);
+    mettreFondEcranUni(rendererWindow);
+
+    for(i=0;i<5;i++){
+        if(strcmp(stats[i].Pseudo,"")!=0){
+            sprintf(texte,"%d. %s   %d/%d",i+1,top[i].Pseudo, top[i].NombreVictoireDefaite[0],top[i].NombreVictoireDefaite[1]);
+            affichageTexte(rendererWindow,texte,50,caractGraphisme[i+2]);
+            printf("%s avec %d win(s)\n",top[i].Pseudo, top[i].NombreVictoireDefaite[0]);
+        }
+    }
+    affichageTexte(rendererWindow,"Classement",65,caractGraphisme[1]);
+    Boutton(rendererWindow, caractGraphisme[0],"Retour");
+    SDL_RenderPresent(rendererWindow);
+}
+
+void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caractGraphisme[6]){
+
+    mettreFondEcranUni(rendererWindow);
+
+    printf("Aucun résultat en mémoire\n");
+    affichageTexte(rendererWindow,"Aucun resultat en memoire",50,caractGraphisme[3]);
+
+    affichageTexte(rendererWindow,"Classement",65,caractGraphisme[1]);
+    Boutton(rendererWindow, caractGraphisme[0],"Retour");
+    SDL_RenderPresent(rendererWindow);
+
+}
+
+void remplirTop5(struct Statistiques stats[50],struct Statistiques top[10]){
+    int i,j;
+    for(j=0;j<5;j++){
+        for(i=0;i<50;i++){
+            if(strcmp(stats[i].Pseudo,"")!=0 && stats[i].NombreVictoireDefaite[0]>top[i].NombreVictoireDefaite[0]){
+                top[i].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0];
+                top[i].NombreVictoireDefaite[1]=stats[i].NombreVictoireDefaite[1];
+                strcpy(top[i].Pseudo,stats[i].Pseudo);
+            }
+        }
+    }
+}
+
+int actionMenuStatistiques(SDL_Renderer* rendererWindow,SDL_Rect caractGraphismes[6]){
+    int action,Quitter=0;
+    struct coordonnees positionSouris;
+    SDL_Event event;
+    Uint32 Timer;
+
+    while(!Quitter){
+        Timer=SDL_GetTicks();
+        if(SDL_PollEvent(&event)){
+                switch(event.type){
+                    case SDL_MOUSEBUTTONUP:
+                        SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+                        if(positionSouris.x>caractGraphismes[0].x && positionSouris.x<caractGraphismes[0].x+caractGraphismes[0].w && positionSouris.y>caractGraphismes[0].y && positionSouris.y<caractGraphismes[0].y+caractGraphismes[0].h){
+                            Quitter=1;
+                            action=1;
+                        }
+                    break;
+
+                    default:
+                        Quitter=QuitterAppuieCroixOuEchap(event);
+                        action=0;
+                    break;
+                }
+        }
+        PauseEnfonctionDureeExecution(Timer);
+    }
+
+    return action;
+}
+
+void issueMenuStatistiques(SDL_Renderer* rendererWindow, int action){
+    switch(action){
+    case 0:
+        printf("Fin de l'execution du programme\n\n");
+        break;
+    case 1:
+        printf("Appuie sur le boutton retour\n\n");
+        menuPrincipal(rendererWindow);
+        break;
+    }
 }

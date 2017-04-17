@@ -5,16 +5,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
-/*
-struct Pseudo{
-    char Nom[10];
-};*/
-/*
-struct coordonnees{
-    int x;
-    int y;
-};*/
-
 void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree);
 
 void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistree);
@@ -57,3 +47,6 @@ int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8]
 void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue);
 
 int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree);
+
+void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant);
+void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,struct Pseudo Nom[2]);

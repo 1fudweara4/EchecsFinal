@@ -453,10 +453,12 @@ void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[
         case -1:
             printf("\nJoueur blanc qui gagne\n");
             ajouterVictoireDefaiteAStatistiques(Nom,0,1);
+            menuFinDePartie(rendererWindow,"blanc");
             break;
         case 1:
             printf("\nJoueur noir qui gagne\n");
             ajouterVictoireDefaiteAStatistiques(Nom,1,0);
+            menuFinDePartie(rendererWindow,"blanc");
             break;
         case 2:
             printf("\nAppuie sur la croix fin du programme\n");
@@ -637,5 +639,95 @@ void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGag
                 j++;
             }
         }
+    }
+}
+
+void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante){
+    printf("Bite<\n\n\n\n\n");
+    SDL_Rect caractObjet[3];
+    int action=0;
+    remplirCaractMenuFinDePartie(rendererWindow, caractObjet);
+    affichageMenuFinDePartie(rendererWindow, caractObjet,couleurGagnante);
+    action=actionMenuFinDePartie(caractObjet);
+    issueMenuFinDePartie(rendererWindow,action);
+}
+
+void remplirCaractMenuFinDePartie(SDL_Renderer* rendererWindow, SDL_Rect* caractObjet){
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    caractObjet[0].x=tailleFenetre.x/2;
+    caractObjet[0].y=tailleFenetre.y/12*3;
+
+    caractObjet[1].x=tailleFenetre.x/4;
+    caractObjet[1].y=tailleFenetre.y/12*6;
+    caractObjet[1].w=tailleFenetre.x/2;
+    caractObjet[1].h=(tailleFenetre.y/12)*2;
+
+    caractObjet[2].x=tailleFenetre.x/4;
+    caractObjet[2].y=tailleFenetre.y/12*9;
+    caractObjet[2].w=tailleFenetre.x/2;
+    caractObjet[2].h=tailleFenetre.y/12*2;
+
+}
+
+void affichageMenuFinDePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractObjet,char* couleurGagnante){
+    char Texte[25];
+
+    sprintf(Texte,"Joueur %s gagnant !",couleurGagnante);
+
+    mettreFondEcranUni(rendererWindow);
+    affichageTexte(rendererWindow,Texte,70,caractObjet[0]);
+    Boutton(rendererWindow,caractObjet[1],"Rejouer");
+    Boutton(rendererWindow,caractObjet[2],"Menu principal");
+    SDL_RenderPresent(rendererWindow);
+}
+
+int actionMenuFinDePartie(SDL_Rect* caractObjet){
+    int action,i,Quitter=0;
+    struct coordonnees positionSouris;
+    SDL_Event event;
+    Uint32 Timer;
+
+    while(!Quitter){
+        Timer=SDL_GetTicks();
+        if(SDL_PollEvent(&event)){
+                switch(event.type){
+                    case SDL_MOUSEBUTTONUP:
+                        SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+                        for(i=1;i<3;i++){
+                            if(positionSouris.x>caractObjet[i].x && positionSouris.x<caractObjet[i].x+caractObjet[i].w && positionSouris.y>caractObjet[i].y && positionSouris.y<caractObjet[i].y+caractObjet[i].h){
+                                Quitter=1;
+                                action=i;
+                            }
+                        }
+                    break;
+
+                    default:
+                        Quitter=QuitterAppuieCroixOuEchap(event);
+                        action=0;
+                    break;
+                }
+        }
+        PauseEnfonctionDureeExecution(Timer);
+    }
+
+    return action;
+}
+
+void issueMenuFinDePartie(SDL_Renderer* rendererWindow,int action){
+    switch(action){
+    case 0:
+        printf("Fin du programme\n");
+        break;
+    case 1:
+        printf("Appuie sur boutton Rejouer\n");
+        menuNombredeJoueur(rendererWindow);
+        break;
+    case 2:
+        printf("Appuie sur boutton MenuPrincipal\n");
+        menuPrincipal(rendererWindow);
+        break;
+
     }
 }

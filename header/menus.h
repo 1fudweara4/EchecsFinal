@@ -15,9 +15,10 @@ struct Pseudo{
 };
 
 struct Sauvegarde{
-    int emplacementPions[8][8];
-    struct Pseudo Nom[2];
+    int emplacementPions[64];
     int tourJoueur;
+    struct Pseudo Nom[2];
+
 };
 
 void menuPrincipal(SDL_Renderer* rendererWindow);
@@ -47,3 +48,12 @@ void issueMenuMenuSelectionPseudo(SDL_Renderer* rendererWindow,struct Pseudo Nom
 
 int QuitterAppuieCroixOuEchap(SDL_Event event);
 void PauseEnfonctionDureeExecution(Uint32 Timer);
+
+void menuReprendrePartie(SDL_Renderer* rendererWindow);
+void remplirCaractmenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutton);
+void affichageMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutton,FILE*fichierNom,int* nombrePartie);
+void recuperationNomDesParties(FILE*fichier,char* nomPartie,int* nombrePartie);
+int actionMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutton,int nombrePartie);
+int actionEnFonctionCliqueMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,int nombrePartie);
+void issueMenuReprendrePartie(SDL_Renderer* rendererWindow,int action, struct Pseudo Nom[2]);
+void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie);

@@ -124,6 +124,7 @@ void issueMenuJouer(SDL_Renderer* rendererWindow, int Action){
         break;
     case 2:
         printf("Appuie sur le boutton Reprendre partie\n\n");
+        menuReprendrePartie(rendererWindow);
         break;
     case 3:
         printf("Appuie sur le boutton Retour\n\n");
@@ -315,7 +316,7 @@ void issueMenuMenuSelectionPseudo(SDL_Renderer* rendererWindow,struct Pseudo Nom
         break;
     case 2:
         printf("Appuie sur le boutton Valider\n\n");
-        lancementEchiquier(rendererWindow,Nom,"");
+        lancementEchiquier(rendererWindow,Nom,0);
         break;
     }
 }
@@ -343,4 +344,131 @@ void PauseEnfonctionDureeExecution(Uint32 Timer){
     if(SDL_GetTicks()-Timer<50 && SDL_GetTicks()-Timer>0){
         SDL_Delay(50+SDL_GetTicks()-Timer);
     }
+}
+
+
+void menuReprendrePartie(SDL_Renderer* rendererWindow){
+    int action, nombrePartie=0;
+    SDL_Rect caractBoutton[6];
+    FILE* fichierNom=fopen("DAT/sauvegardeNom.dat","rb");
+    struct Pseudo Nom[2];
+
+        remplirCaractmenuReprendrePartie(rendererWindow,caractBoutton);
+        affichageMenuReprendrePartie(rendererWindow,caractBoutton,fichierNom,&nombrePartie);
+        action=actionMenuReprendrePartie(rendererWindow,caractBoutton,nombrePartie);
+
+        if(fichierNom!=NULL){
+            recuperationNom(fichierNom,Nom,action);
+            fclose(fichierNom);
+        }
+        issueMenuReprendrePartie(rendererWindow,action,Nom);
+}
+
+void remplirCaractmenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutton){
+    int i;
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    for(i=1;i<6;i++){
+            caractBoutton[i].w=tailleFenetre.x/6*5;
+            caractBoutton[i].h=tailleFenetre.y/10;
+            caractBoutton[i].x=tailleFenetre.x/12;
+            caractBoutton[i].y=tailleFenetre.y/10*(i-1)+tailleFenetre.y/10/3*(i);
+    }
+    caractBoutton[0].x=tailleFenetre.x-150;
+    caractBoutton[0].y=tailleFenetre.y-100;
+    caractBoutton[0].w=100;
+    caractBoutton[0].h=50;
+
+}
+
+void affichageMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutton,FILE*fichier,int* nombrePartie){
+    int i;
+    char nomPartie[50];
+
+    mettreFondEcranUni(rendererWindow);
+    for(i=1;i<6;i++){
+        recuperationNomDesParties(fichier,nomPartie,nombrePartie);
+        Boutton(rendererWindow,caractBoutton[i],nomPartie);
+    }
+
+    Boutton(rendererWindow,caractBoutton[0],"Retour");
+    SDL_RenderPresent(rendererWindow);
+}
+
+void recuperationNomDesParties(FILE*fichier,char* nomPartie,int* nombrePartie){
+    struct Pseudo Nom[2];
+    if(fichier!=NULL && fread(Nom,sizeof(struct Pseudo),2,fichier) && !feof(fichier)){
+        if(strcmp(Nom[1].Nom,"")==0){
+                sprintf(nomPartie,"Partie 1 joueur avec %s",Nom[0].Nom);
+                *nombrePartie=*nombrePartie+1;
+        }
+        else{
+                sprintf(nomPartie,"Partie 2 joueurs avec %s & %s",Nom[0].Nom,Nom[1].Nom);
+                *nombrePartie=*nombrePartie+1;
+        }
+    }
+    else{
+        sprintf(nomPartie,"Vide");
+    }
+
+}
+
+int actionMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutton,int nombrePartie){
+    int action,Quitter=0;
+    SDL_Event event;
+    Uint32 Timer;
+
+    while(!Quitter){
+        Timer=SDL_GetTicks();
+        if(SDL_PollEvent(&event)){
+                switch(event.type){
+                    case SDL_MOUSEBUTTONUP:
+                        action=actionEnFonctionCliqueMenuReprendrePartie(rendererWindow,caractBoutton,nombrePartie);
+                        if(action!=-1){
+                            Quitter=1;
+                        }
+                    break;
+
+                    default:
+                        Quitter=QuitterAppuieCroixOuEchap(event);
+                    break;
+                }
+        }
+        PauseEnfonctionDureeExecution(Timer);
+    }
+
+    return action;
+}
+
+int actionEnFonctionCliqueMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,int nombrePartie){
+    struct coordonnees positionSouris;
+    int i,action=-1;
+
+    SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+
+    for(i=0;i<nombrePartie+1;i++){
+        if(positionSouris.x>CaractBoutton[i].x && positionSouris.x<CaractBoutton[i].x+CaractBoutton[i].w && positionSouris.y>CaractBoutton[i].y && positionSouris.y<CaractBoutton[i].y+CaractBoutton[i].h){
+            action=i;
+    }
+    }
+
+    return action;
+}
+
+void issueMenuReprendrePartie(SDL_Renderer* rendererWindow,int action, struct Pseudo Nom[2]){
+    if(action==0){
+        menuJouer(rendererWindow);
+    }
+    else{
+        printf("Choix partie %d avec %s et %s\n",action-1, Nom[0].Nom, Nom[1].Nom);
+        lancementEchiquier(rendererWindow,Nom,action);
+    }
+}
+
+void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie){
+
+    fseek(fichier, sizeof(struct Pseudo)*2*(nombrePartie-1), SEEK_SET);
+    fread(Nom,sizeof(struct Pseudo),2,fichier);
+    printf("%s\n\n",Nom[1].Nom);
 }

@@ -2,28 +2,28 @@
 #include"header/menus.h"
 #include "header/echiquier.h"
 
-void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],char* cheminEnregistrement){
+void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree){
 
     int emplacementPions[8][8];
 
     printf("Lancement Echiquier\n");
-    initalisationEchiquier(emplacementPions,cheminEnregistrement);
+    initalisationEchiquier(emplacementPions,numeroPartieEnregistree);
 
     affichagePartieEchiquier(rendererWindow,emplacementPions,Nom);
     SDL_RenderPresent(rendererWindow);
     printf("\n\n");
 
-    lancementPartie(rendererWindow,emplacementPions,Nom);
+    lancementPartie(rendererWindow,emplacementPions,Nom,numeroPartieEnregistree);
 
 }
 
 
-void initalisationEchiquier(int emplacementPions[8][8],char* cheminEnregistrement){
-    if(strcmp(cheminEnregistrement,"")==0){
+void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistree){
+    if(numeroPartieEnregistree==0){
         premierRemplissageTableauEchiquier(emplacementPions);
     }
     else{
-        /** Fonction Chargement echiquier sauvegardé **/
+        recuperationEchiquiersauvegarde(emplacementPions,numeroPartieEnregistree);
     }
 }
 
@@ -47,6 +47,22 @@ void premierRemplissageTableauEchiquier(int emplacementPions[8][8]){
         printf("\n");
     }
     printf("Echiquier rempli\n");
+}
+
+void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartieEnregistree){
+    int i;
+    int emplacement[64];
+    FILE* fichierEmplacement=fopen("DAT/sauvegardeEmplacement.dat","rb");
+
+
+    fseek(fichierEmplacement, sizeof(emplacement)*(numeroPartieEnregistree-1), SEEK_SET);
+    fread(emplacement,sizeof(int),64,fichierEmplacement);
+
+    for(i=0;i<64;i++){
+        emplacementPions[i/8][i%8]=emplacement[i]   ;
+        printf("%d |",emplacement[i]);
+    }
+    fclose(fichierEmplacement);
 }
 
 
@@ -178,8 +194,13 @@ int compterNbPions(int emplacementPions[8][8],int Couleur){
 
 
 
-void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]){
-    int i,Quitter=0,causeFin=0, dernierJoueurQuiAjoue;;
+void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int numeroPartieEnregistree){
+    int i,Quitter=0,causeFin=0, dernierJoueurQuiAjoue;
+
+    if(numeroPartieEnregistree!=0 && ajoutTourEventuelPourSauvegarde(numeroPartieEnregistree)==1){
+        deroulementDuTour(rendererWindow,emplacementPions,Nom,1,&causeFin,&dernierJoueurQuiAjoue);
+        Quitter=verificationConditionFin(&causeFin, emplacementPions,1);
+    }
 
     while(!Quitter){
         for(i=0;i<2;i++){
@@ -206,7 +227,6 @@ void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],s
 }
 
 void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin,struct Pseudo Nom[2]){
-    //Utiliser causeFin seulement pour sauvegarde
     int Quitter=0;
     SDL_Event event;
     Uint32 Timer;
@@ -531,19 +551,32 @@ int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8]
 
 
 void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue){
-    struct Sauvegarde Partie;
-    int i,j;
-    FILE* fichier=fopen("DAT/sauvegarde.dat","a");
+    int i, emplacement[64];
+    FILE* fichierNom=fopen("DAT/sauvegardeNom.dat","ab");
+    FILE* fichierEmplacement=fopen("DAT/sauvegardeEmplacement.dat","ab");
+    FILE* fichierTour=fopen("DAT/sauvegardeTour.dat","ab");
 
-    for(i=0;i<8;i++){
-        for(j=0;j<8;j++){
-            Partie.emplacementPions[i][j]=emplacementPions[i][j];
-        }
+    for(i=0;i<64;i++){
+        emplacement[i]=emplacementPions[i/8][i%8];
     }
-    strcpy(Nom[0].Nom,Partie.Nom[0].Nom);
-    strcpy(Nom[1].Nom,Partie.Nom[1].Nom);
-    Partie.tourJoueur=JoueurQuiJoue;
 
-    fwrite(&Partie,sizeof(struct Sauvegarde),1,fichier);
-    fclose(fichier);
+    fwrite(Nom,sizeof(struct Pseudo),2,fichierNom);
+    fwrite(emplacement,sizeof(int),64,fichierEmplacement);
+    fwrite(&JoueurQuiJoue,sizeof(int),1,fichierTour);
+
+    fclose(fichierNom);
+    fclose(fichierEmplacement);
+    fclose(fichierTour);
+}
+
+int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree){
+    int TourSuplementaire;
+    FILE* fichierTour=fopen("DAT/sauvegardeTour.dat","rb");
+
+    fseek(fichierTour, sizeof(int)*(numeroPartieEnregistree-1), SEEK_SET);
+    fread(&TourSuplementaire,sizeof(int),1,fichierTour);
+
+    fclose(fichierTour);
+
+    return TourSuplementaire;
 }

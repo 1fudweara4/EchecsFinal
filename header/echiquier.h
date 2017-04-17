@@ -15,10 +15,11 @@ struct coordonnees{
     int y;
 };*/
 
-void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],char* cheminEnregistrement);
+void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree);
 
-void initalisationEchiquier(int emplacementPions[8][8],char* cheminEnregistrement);
+void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistree);
 void premierRemplissageTableauEchiquier(int emplacementPions[8][8]);
+void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartieEnregistree);
 
 void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]);
 void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8]);
@@ -29,7 +30,7 @@ void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][
 
 int compterNbPions(int emplacementPions[8][8],int Couleur);
 
-void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]);
+void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int numeroPartieEnregistree);
 void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin,int* dernierJoueurQuiAjoue);
 
 void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin,struct Pseudo Nom[2]);
@@ -54,3 +55,5 @@ void affichageMenuSauvegarder(SDL_Renderer* rendererWindow, SDL_Rect* CaractBout
 int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2],int action,int* causeFin);
 
 void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue);
+
+int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree);

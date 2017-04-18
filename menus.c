@@ -78,7 +78,6 @@ int evenementMenuPrincipal(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton
                         if(positionSouris.x>caractImageTexteIntro[2].x && positionSouris.x<caractImageTexteIntro[2].x+caractImageTexteIntro[2].w && positionSouris.y>caractImageTexteIntro[2].y && positionSouris.y<caractImageTexteIntro[2].y+caractImageTexteIntro[2].h){
                             Action=4;
                         }
-
                         if(Action!=0){
                             Quitter=1;
                         }

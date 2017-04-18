@@ -1,5 +1,6 @@
 Patchnotes:
 
+-0.4.3 : Améliorations graphiques.
 -0.4.2 : Ajout du menu Options disponible via le menu principal.
 -0.4.1 : Recodage fonction génération du top 5 des joueurs dans le menu stats.
 -0.4 : MàJ de l'interface graphique.

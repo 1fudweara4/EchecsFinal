@@ -1,6 +1,8 @@
 #include "header/outils.h"
 #include"header/menus.h"
 #include "header/echiquier.h"
+#include "header/jeuOrdinateur.h"
+
 
 void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree){
 
@@ -145,6 +147,9 @@ void affichageCarreBlanc(SDL_Renderer* rendererWindow){
 
     SDL_SetRenderDrawColor(rendererWindow,187, 174, 152,255);
     SDL_RenderFillRects(rendererWindow,caractCarre,2);
+    SDL_SetRenderDrawColor(rendererWindow,1, 1, 1,255);
+    SDL_RenderDrawRects(rendererWindow,caractCarre,2);
+
 
 }
 

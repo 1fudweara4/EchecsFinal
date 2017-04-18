@@ -24,6 +24,9 @@ void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){
 
         SDL_SetRenderDrawColor(rendererWindow,204, 204, 255,255);
         SDL_RenderFillRect(rendererWindow,&CaractSurface);
+
+        SDL_SetRenderDrawColor(rendererWindow,1, 1, 1,255);
+        SDL_RenderDrawRect(rendererWindow,&CaractSurface);
         textureTexte=SDL_CreateTextureFromSurface(rendererWindow, SurfaceText);
 
         CaractSurface.x=(CaractSurface.x+((CaractSurface.w)-(SurfaceText->w))/2);

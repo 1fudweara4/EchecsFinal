@@ -10,6 +10,7 @@ int main(int argc, char** args){
 
     initialisationSDL();
     recuperationDeLaResolution(&SCREEN_WIDTH,&SCREEN_HEIGHT);
+    mettreIconeProgramme(window);
     window=SDL_CreateWindow("L'échec ou la réussite ?", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     verificationErreurFenetre(window);
     rendererWindow = SDL_CreateRenderer(window,-1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -30,6 +31,7 @@ void initialisationSDL(){ //Initialisation SDL + extensions TTF et image
     initSDL();
     initSDLttf();
     initSDLimage();
+    SDL_Delay(50);
 }
 
 void initSDL(){ // Init SDL
@@ -85,7 +87,16 @@ void verificationErreurFenetre(SDL_Window* window){ // Vérification erreur Fene
         printf("Fenetre : OK\n");
     }
 
-    SDL_Delay(100);
+    SDL_Delay(30);
+}
+
+void mettreIconeProgramme(SDL_Window* window){
+
+    SDL_Surface *surface=IMG_Load("DAT/Image/icone.png");
+    SDL_SetWindowIcon(window, surface);
+    SDL_FreeSurface(surface);
+
+
 }
 
 void verificationErreurRenderer(SDL_Renderer* rendererWindow){ //Verification erreur renderer
@@ -98,7 +109,7 @@ void verificationErreurRenderer(SDL_Renderer* rendererWindow){ //Verification er
         printf("Initialisation renderer : OK\n\n");
     }
 
-    SDL_Delay(100);
+    SDL_Delay(30);
 }
 
 void finLibrairies(){ // Fermeture SDL + extensions

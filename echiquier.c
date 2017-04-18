@@ -610,7 +610,7 @@ int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree){
 
 void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant, int joueurPerdant){
     FILE* fichierStats=fopen("DAT/stat.dat","rb");
-    struct Statistiques stats[50]={NULL};
+    struct Statistiques stats[50]={0};
 
     if(fichierStats!=NULL){
 

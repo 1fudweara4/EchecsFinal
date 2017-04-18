@@ -5,13 +5,13 @@
 void menuPrincipal(SDL_Renderer* rendererWindow){ // Menu principal : affichage graphique puis actions
     int Action;
     SDL_Rect CaractBoutton[3];
-    SDL_Rect caractImageTexteIntro[2];
+    SDL_Rect caractImageTexteIntro[3];
 
     printf("Execution menuPrincipal\n");
     remplirCaractTroisBouttons(rendererWindow, CaractBoutton);
     remplirCaractImageEtTexteIntro(rendererWindow,caractImageTexteIntro);
     affichageMenuPrincipal(rendererWindow,CaractBoutton,caractImageTexteIntro);
-    Action=evenementMenuTroisBouttons(rendererWindow,CaractBoutton);
+    Action=evenementMenuPrincipal(rendererWindow,CaractBoutton,caractImageTexteIntro);
     issueMenuPrincipal(rendererWindow,Action);
 }
 
@@ -41,6 +41,11 @@ void remplirCaractImageEtTexteIntro(SDL_Renderer* rendererWindow,SDL_Rect* carac
     caractImageTexteIntro[1].w=tailleFenetre.x/6;
     caractImageTexteIntro[1].h=tailleFenetre.x/6/1.75;
 
+    caractImageTexteIntro[2].x=tailleFenetre.x- (tailleFenetre.y/10)-10;
+    caractImageTexteIntro[2].y=tailleFenetre.y- (tailleFenetre.y/10)-10;
+    caractImageTexteIntro[2].w= (tailleFenetre.y/10);
+    caractImageTexteIntro[2].h= (tailleFenetre.y/10);
+
 }
 
 void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,SDL_Rect* caractImageTexteIntro){ //Affichage des 3 bouttons dans menu principal
@@ -52,8 +57,41 @@ void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton
     Boutton(rendererWindow,CaractBoutton[2],"Quitter");
     affichageTexte(rendererWindow,"Echecs modifies",75,caractImageTexteIntro[0],0,1);
     affichageImagePNG(rendererWindow,caractImageTexteIntro[1],"DAT/Image/imageAccueil.jpg");
+    affichageImagePNG(rendererWindow,caractImageTexteIntro[2],"DAT/Image/bouttonOptions.png");
 
     SDL_RenderPresent(rendererWindow);
+}
+
+int evenementMenuPrincipal(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,SDL_Rect* caractImageTexteIntro){ // Attente de clique sur l'un des trois bouttons
+    int Quitter=0, Action=0;
+    SDL_Event event;
+    struct coordonnees positionSouris;
+    Uint32 Timer;
+
+    while(!Quitter){
+        Timer=SDL_GetTicks();
+        if(SDL_PollEvent(&event)){
+                switch(event.type){
+                    case SDL_MOUSEBUTTONUP:
+                        Action=actionEnFonctionCliqueMenuTroisBouttons(rendererWindow,CaractBoutton);
+                        SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+                        if(positionSouris.x>caractImageTexteIntro[2].x && positionSouris.x<caractImageTexteIntro[2].x+caractImageTexteIntro[2].w && positionSouris.y>caractImageTexteIntro[2].y && positionSouris.y<caractImageTexteIntro[2].y+caractImageTexteIntro[2].h){
+                            Action=4;
+                        }
+
+                        if(Action!=0){
+                            Quitter=1;
+                        }
+                    break;
+
+                    default:
+                        Quitter=QuitterAppuieCroixOuEchap(event);
+                    break;
+                }
+        }
+        PauseEnfonctionDureeExecution(Timer);
+    }
+    return Action;
 }
 
 int evenementMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){ // Attente de clique sur l'un des trois bouttons
@@ -111,7 +149,193 @@ void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action){ // Issue du m
     case 3:
         printf("Appuie sur le boutton Quitter\n\n");
         break;
+    case 4:
+        printf("Appuie sur le boutton Options\n\n");
+        menuOptions(rendererWindow);
+        break;
     }
+}
+
+
+
+void menuOptions(SDL_Renderer* rendererWindow){
+    int action=0;
+    SDL_Rect caractAffichage[11];
+
+    remplirCaractMenuOptions(rendererWindow, caractAffichage);
+    affichageMenuOptions(rendererWindow, caractAffichage);
+    action=evenementMenuOptions(rendererWindow, caractAffichage);
+
+    IssueMenuOptions(rendererWindow,action);
+}
+
+void remplirCaractMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* caractAffichage){
+    struct coordonnees tailleFenetre;
+    int i;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    caractAffichage[0].x=tailleFenetre.x/2;
+    caractAffichage[0].y=tailleFenetre.y/8;
+
+    caractAffichage[1].x=tailleFenetre.x/2;
+    caractAffichage[1].y=tailleFenetre.y/8*2;
+
+    for(i=2;i<5;i++){
+        caractAffichage[i].x=tailleFenetre.x/3;
+        caractAffichage[i].y=tailleFenetre.y/8*(i+1);
+
+        caractAffichage[i+3].y=tailleFenetre.y/8*(i+1)-15;
+        caractAffichage[i+3].x=tailleFenetre.x/3*2;
+        caractAffichage[i+3].w=caractAffichage[i+3].h=tailleFenetre.y/8-10;
+    }
+    for(i=8;i<10;i++){
+        caractAffichage[i].x=tailleFenetre.x/10;
+        caractAffichage[i].y=tailleFenetre.y/8*(i-2);
+        caractAffichage[i].w=tailleFenetre.x/2;
+        caractAffichage[i].h=tailleFenetre.y/12;
+    }
+    caractAffichage[10].x=tailleFenetre.x-150;
+    caractAffichage[10].y=tailleFenetre.y-100;
+    caractAffichage[10].w=100;
+    caractAffichage[10].h=50;
+
+}
+
+void affichageMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* caractAffichage){
+    int i;
+    mettreFondEcranUni(rendererWindow);
+
+    affichageTexte(rendererWindow,"Options",50,caractAffichage[0],0,0);
+    affichageTexte(rendererWindow,"Resolution (quitte le programme):",50,caractAffichage[1],0,0);
+    affichageTexte(rendererWindow,"640 x 480",50,caractAffichage[2],0,0);
+    affichageTexte(rendererWindow,"1 024 x 768",50,caractAffichage[3],0,0);
+    affichageTexte(rendererWindow,"1 280 x 960",50,caractAffichage[4],0,0);
+
+    SDL_SetRenderDrawColor(rendererWindow,1, 1, 1,255);
+    for(i=5;i<8;i++){
+            SDL_RenderDrawRect(rendererWindow,&caractAffichage[i]);
+    }
+    mettreSigneSurDefinitionActuelle(rendererWindow,caractAffichage);
+    Boutton(rendererWindow,caractAffichage[8],"Reset statistiques");
+    Boutton(rendererWindow,caractAffichage[9],"Reset sauvegardes");
+
+    Boutton(rendererWindow,caractAffichage[10],"Retour");
+
+    SDL_RenderPresent(rendererWindow);
+}
+
+void mettreSigneSurDefinitionActuelle(SDL_Renderer* rendererWindow, SDL_Rect* CaractAffichage){
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    switch(tailleFenetre.x){
+    case 640:
+        affichageImagePNG(rendererWindow,CaractAffichage[5],"DAT/Image/valide.png");
+        break;
+    case 1024:
+        affichageImagePNG(rendererWindow,CaractAffichage[6],"DAT/Image/valide.png");
+        break;
+    case 1280:
+        affichageImagePNG(rendererWindow,CaractAffichage[7],"DAT/Image/valide.png");
+        break;
+    }
+}
+
+int evenementMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* CaractAffichage){
+    int Quitter=0, Action=0;
+    SDL_Event event;
+    Uint32 Timer;
+
+    while(!Quitter){
+        Timer=SDL_GetTicks();
+        if(SDL_PollEvent(&event)){
+                switch(event.type){
+                    case SDL_MOUSEBUTTONUP:
+                        Quitter=actionCliqueMenuOptions(rendererWindow,CaractAffichage,&Action);
+                    break;
+
+                    default:
+                        Quitter=QuitterAppuieCroixOuEchap(event);
+                    break;
+                }
+        }
+        PauseEnfonctionDureeExecution(Timer);
+    }
+    return Action;
+}
+
+int actionCliqueMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* CaractAffichage,int* Action){
+    int Quitter=0,i;
+    struct coordonnees positionSouris;
+
+    SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+
+    for(i=5;i<11;i++){
+        if(positionSouris.x>CaractAffichage[i].x && positionSouris.x<CaractAffichage[i].x+CaractAffichage[i].w && positionSouris.y>CaractAffichage[i].y && positionSouris.y<CaractAffichage[i].y+CaractAffichage[i].h){
+            *Action=i;
+            Quitter=1;
+        }
+    }
+
+    return Quitter;
+}
+
+void IssueMenuOptions(SDL_Renderer* rendererWindow,int action){
+    switch(action){
+        case 0:
+            printf("Appuie sur la croix ou echap\n\n");
+            break;
+        case 5:
+            printf("Changement de resolution en 640 x 480\n\n");
+            changementDefinition(rendererWindow,640,480);
+            break;
+        case 6:
+            printf("Changement de resolution en 1 024 x 768\n\n");
+            changementDefinition(rendererWindow,1024,768);
+            break;
+        case 7:
+            printf("Changement de resolution en 1 280 x 960\n\n");
+            changementDefinition(rendererWindow,1280,960);
+            break;
+        case 8:
+            printf("Reset fichier statistiques\n\n");
+            remove("DAT/stat.dat");
+            menuOptions(rendererWindow);
+            break;
+        case 9:
+            printf("Reset fichiers sauvegarde\n\n");
+            resetSauvegardes();
+            menuOptions(rendererWindow);
+            break;
+        case 10:
+            printf("Appuie sur Boutton retour\n\n");
+            menuPrincipal(rendererWindow);
+            break;
+    }
+}
+
+void resetSauvegardes(){
+    remove("DAT/sauvegardeEmplacement.dat");
+    remove("DAT/sauvegardeNom.dat");
+    remove("DAT/sauvegardeTour.dat");
+}
+
+void changementDefinition(SDL_Renderer* rendererWindow,int x,int y){
+    struct coordonnees tailleFenetre;
+    FILE* fichierDefinition;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    if(tailleFenetre.x==x){
+        menuOptions(rendererWindow);
+    }
+    else{
+        fichierDefinition=fopen("DAT/settings.dat","w");
+        tailleFenetre.x=x;
+        tailleFenetre.y=y;
+        fwrite(&tailleFenetre,sizeof(struct coordonnees),1,fichierDefinition);
+        fclose(fichierDefinition);
+    }
+
 }
 
 
@@ -576,14 +800,20 @@ void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caract
 }
 
 void remplirTop5(struct Statistiques stats[50],struct Statistiques top[5]){
-    int i,j;
-    for(j=0;j<5;j++){
-        for(i=0;i<50;i++){
-            if(strcmp(stats[i].Pseudo,"")!=0 && stats[i].NombreVictoireDefaite[0]>top[j].NombreVictoireDefaite[0]){
-                top[j].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0];
-                top[j].NombreVictoireDefaite[1]=stats[i].NombreVictoireDefaite[1];
-                strcpy(top[j].Pseudo,stats[i].Pseudo);
-                strcpy(stats[i].Pseudo,"");
+    int i,j,k;
+    for(i=0;i<50;i++){
+        if(strcmp(stats[i].Pseudo,"")!=0){
+            for(j=0;j<5;j++){
+                if(stats[i].NombreVictoireDefaite[0]>top[j].NombreVictoireDefaite[0]){
+                    for(k=4;k>j;k--){
+                        top[k]=top[k-1];
+                    }
+                    top[j].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0];
+                    top[j].NombreVictoireDefaite[1]=stats[i].NombreVictoireDefaite[1];
+                    strcpy(top[j].Pseudo,stats[i].Pseudo);
+                    strcpy(stats[i].Pseudo,"");
+                    stats[i].NombreVictoireDefaite[0]=0;
+                }
             }
         }
     }

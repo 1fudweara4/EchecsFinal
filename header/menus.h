@@ -17,9 +17,20 @@ void menuPrincipal(SDL_Renderer* rendererWindow);
 void remplirCaractTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
 void remplirCaractImageEtTexteIntro(SDL_Renderer* rendererWindow,SDL_Rect* caractImageTexteIntro);
 void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,SDL_Rect* caractImageTexteIntro);
+int evenementMenuPrincipal(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,SDL_Rect* caractImageTexteIntro);
 int evenementMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
 int actionEnFonctionCliqueMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
 void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action);
+
+void menuOptions(SDL_Renderer* rendererWindow);
+void remplirCaractMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* CaractTexte);
+void affichageMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* caractAffichage);
+void mettreSigneSurDefinitionActuelle(SDL_Renderer* rendererWindow, SDL_Rect* CaractAffichage);
+int evenementMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* CaractAffichage);
+int actionCliqueMenuOptions(SDL_Renderer* rendererWindow, SDL_Rect* CaractAffichage,int* Action);
+void IssueMenuOptions(SDL_Renderer* rendererWindow,int action);
+void resetSauvegardes();
+void changementDefinition(SDL_Renderer* rendererWindow,int x,int y);
 
 void menuJouer(SDL_Renderer* rendererWindow);
 void affichageMenuJouer(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton);

@@ -1,14 +1,15 @@
 #include "header/main.h"
 #include"header/menus.h"
 
-int main(int argc, char* args[]){
+int main(int argc, char** args){
 
     SDL_Window* window = NULL;
     SDL_Renderer* rendererWindow=NULL;
-    int SCREEN_WIDTH=640;
-    int SCREEN_HEIGHT=480;
+    int SCREEN_WIDTH;
+    int SCREEN_HEIGHT;
 
     initialisationSDL();
+    recuperationDeLaResolution(&SCREEN_WIDTH,&SCREEN_HEIGHT);
     window=SDL_CreateWindow("L'échec ou la réussite ?", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     verificationErreurFenetre(window);
     rendererWindow = SDL_CreateRenderer(window,-1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -58,6 +59,20 @@ void initSDLimage(){ //Init SDL image
     }
     else{
         printf("Lancement de la libraire SDL_image : OK\n");
+    }
+}
+
+void recuperationDeLaResolution(int* SCREEN_WIDTH,int* SCREEN_HEIGHT){
+    FILE* fichierDefinition=fopen("DAT/settings.dat","r");
+    struct coordonnees tailleFenetre;
+    if(fichierDefinition==NULL){
+        *SCREEN_WIDTH=640;
+        *SCREEN_HEIGHT=480;
+    }
+    else{
+        fread(&tailleFenetre,sizeof(struct coordonnees),1,fichierDefinition);
+        *SCREEN_WIDTH=tailleFenetre.x;
+        *SCREEN_HEIGHT=tailleFenetre.y;
     }
 }
 

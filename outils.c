@@ -1,13 +1,11 @@
 #include"header/outils.h"
 
 void mettreFondEcranUni(SDL_Renderer* rendererWindow){
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+    SDL_Rect caract={0,0,tailleFenetre.x,tailleFenetre.x};
 
-    SDL_SetRenderDrawColor(rendererWindow,51,51,51,255);
-
-    if(SDL_RenderClear(rendererWindow)<0){
-        printf("Erreur:%s\n",SDL_GetError());
-    }
-
+    affichageImagePNG(rendererWindow,caract,"DAT/Image/fondEcran.jpg");
     SDL_RenderPresent(rendererWindow);
 }
 
@@ -24,7 +22,7 @@ void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){
         Police = TTF_OpenFont("DAT/chesterfield.ttf",50);
         SurfaceText = TTF_RenderText_Solid(Police, Texte, Couleur);
 
-        SDL_SetRenderDrawColor(rendererWindow,250,250,250,255);
+        SDL_SetRenderDrawColor(rendererWindow,204, 204, 255,255);
         SDL_RenderFillRect(rendererWindow,&CaractSurface);
         textureTexte=SDL_CreateTextureFromSurface(rendererWindow, SurfaceText);
 
@@ -89,19 +87,20 @@ void affichageImagePNG(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char
     }
 }
 
-void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rect Position){
+void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rect Position,int typeRendu,int couleurRendu){
 
     SDL_Surface* SurfaceText=NULL;
     SDL_Texture* texture;
-    SDL_Color Couleur={1,1,1},Fond={51,51,51};
     TTF_Font *Font = NULL;
+    SDL_Color Couleur;
+
+    Couleur=choixCouleur(couleurRendu);
 
     if(Texte==""){
         printf("Erreur texte non défini\n");
     }
     else{
-        Font = TTF_OpenFont("DAT/chesterfield.ttf",taille);
-        SurfaceText = TTF_RenderText_Shaded(Font, Texte, Couleur,Fond);
+        SurfaceText=creationTexte(typeRendu,Font,Texte,taille,Couleur);
         texture = SDL_CreateTextureFromSurface(rendererWindow, SurfaceText);
 
         Position.w=SurfaceText->w;
@@ -112,10 +111,46 @@ void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rec
         SDL_RenderCopy(rendererWindow,texture,NULL ,&Position);
         printf("Texte '%s' affiché\n",Texte);
 
-        SDL_FreeSurface(SurfaceText);
-        TTF_CloseFont(Font);
-        SDL_DestroyTexture(texture);
-
-        Font = NULL;
+        fermetureSDLvariables(SurfaceText,Font,texture);
     }
 }
+
+SDL_Color choixCouleur(int couleurRendu){
+
+    SDL_Color couleur;
+
+    if(couleurRendu==1){
+        couleur.r=couleur.g=couleur.b=1;
+    }
+    else{
+        couleur.r=couleur.g=couleur.b=255;
+    }
+    return couleur;
+}
+
+SDL_Surface* creationTexte(int typeRendu,TTF_Font* Font,char* Texte,int taille,SDL_Color Couleur){
+
+    SDL_Surface* surfaceText;
+    Font = TTF_OpenFont("DAT/chesterfield.ttf",taille);
+
+    if(typeRendu==0){
+        surfaceText = TTF_RenderText_Solid(Font, Texte, Couleur);
+    }
+    else{
+        SDL_Color Fond={187, 174, 152};
+        surfaceText = TTF_RenderText_Shaded(Font, Texte, Couleur,Fond);
+    }
+
+    return surfaceText;
+
+}
+
+void fermetureSDLvariables(SDL_Surface* SurfaceText, TTF_Font *Font, SDL_Texture* texture){
+    SDL_FreeSurface(SurfaceText);
+    TTF_CloseFont(Font);
+    SDL_DestroyTexture(texture);
+    Font = NULL;
+    SurfaceText=NULL;
+    texture=NULL;
+}
+

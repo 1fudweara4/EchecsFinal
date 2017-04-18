@@ -1,5 +1,6 @@
 Patchnotes:
 
+-0.4 MàJ de l'interface graphique.
 -0.3.1 : Correction de bugs pour les statistiques.
 -0.3 : Ajout des statistiques ! ( bug connu : init le fichier avec joueur 2 qui gagne -> génération top5 qui est pas bon )
 -0.2 : Ajout de la sauvegarde : maintenant en partie appuyez sur Echap pour la sauvegarder à tout moment et reprenez la plus tard via le menu dédié !

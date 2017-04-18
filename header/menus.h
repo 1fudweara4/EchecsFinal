@@ -15,7 +15,8 @@ struct Statistiques{
 
 void menuPrincipal(SDL_Renderer* rendererWindow);
 void remplirCaractTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
-void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton);
+void remplirCaractImageEtTexteIntro(SDL_Renderer* rendererWindow,SDL_Rect* caractImageTexteIntro);
+void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,SDL_Rect* caractImageTexteIntro);
 int evenementMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
 int actionEnFonctionCliqueMenuTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
 void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action);
@@ -51,9 +52,9 @@ void issueMenuReprendrePartie(SDL_Renderer* rendererWindow,int action, struct Ps
 void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie);
 
 void menuStatistiques(SDL_Renderer* rendererWindow);
-void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caractGraphisme[6]);
-void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques stats[50],SDL_Rect caractGraphisme[6]);
-void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caractGraphisme[6]);
+void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caractGraphisme[8]);
+void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques stats[50],SDL_Rect caractGraphisme[8]);
+void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caractGraphisme[8]);
 void remplirTop5(struct Statistiques stats[50],struct Statistiques top[10]);
-int actionMenuStatistiques(SDL_Renderer* rendererWindow,SDL_Rect caractGraphismes[6]);
+int actionMenuStatistiques(SDL_Renderer* rendererWindow,SDL_Rect caractGraphismes[8]);
 void issueMenuStatistiques(SDL_Renderer* rendererWindow, int action);

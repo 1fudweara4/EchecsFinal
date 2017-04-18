@@ -5,10 +5,12 @@
 void menuPrincipal(SDL_Renderer* rendererWindow){ // Menu principal : affichage graphique puis actions
     int Action;
     SDL_Rect CaractBoutton[3];
+    SDL_Rect caractImageTexteIntro[2];
 
     printf("Execution menuPrincipal\n");
     remplirCaractTroisBouttons(rendererWindow, CaractBoutton);
-    affichageMenuPrincipal(rendererWindow,CaractBoutton);
+    remplirCaractImageEtTexteIntro(rendererWindow,caractImageTexteIntro);
+    affichageMenuPrincipal(rendererWindow,CaractBoutton,caractImageTexteIntro);
     Action=evenementMenuTroisBouttons(rendererWindow,CaractBoutton);
     issueMenuPrincipal(rendererWindow,Action);
 }
@@ -27,13 +29,30 @@ void remplirCaractTroisBouttons(SDL_Renderer* rendererWindow, SDL_Rect* CaractBo
     }
 }
 
-void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton){ //Affichage des 3 bouttons dans menu principal
+void remplirCaractImageEtTexteIntro(SDL_Renderer* rendererWindow,SDL_Rect* caractImageTexteIntro){
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    caractImageTexteIntro[0].x=tailleFenetre.x/2;
+    caractImageTexteIntro[0].y=tailleFenetre.y/13;
+
+    caractImageTexteIntro[1].x=tailleFenetre.x/15;
+    caractImageTexteIntro[1].y=tailleFenetre.x/50;
+    caractImageTexteIntro[1].w=tailleFenetre.x/6;
+    caractImageTexteIntro[1].h=tailleFenetre.x/6/1.75;
+
+}
+
+void affichageMenuPrincipal(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,SDL_Rect* caractImageTexteIntro){ //Affichage des 3 bouttons dans menu principal
 
     mettreFondEcranUni(rendererWindow);
 
     Boutton(rendererWindow,CaractBoutton[0],"Jouer");
     Boutton(rendererWindow,CaractBoutton[1],"Statistiques");
     Boutton(rendererWindow,CaractBoutton[2],"Quitter");
+    affichageTexte(rendererWindow,"Echecs modifies",75,caractImageTexteIntro[0],0,1);
+    affichageImagePNG(rendererWindow,caractImageTexteIntro[1],"DAT/Image/imageAccueil.jpg");
+
     SDL_RenderPresent(rendererWindow);
 }
 
@@ -177,7 +196,7 @@ void issueMenuNombredeJoueur(SDL_Renderer* rendererWindow, int Action){
 
 void menuSelectionPseudo(SDL_Renderer* rendererWindow,int nombreDeJoueur){
     int Action;
-    SDL_Rect CaractBoutton[3];
+    SDL_Rect CaractBoutton[4];
     struct Pseudo Nom[2];
 
     Nom[0].Nom[0]='\0';
@@ -210,12 +229,16 @@ void remplirCaractBouttonSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* 
     CaractBoutton[2].y=tailleFenetre.y/2;
     CaractBoutton[2].w=tailleFenetre.x*2/9;
     CaractBoutton[2].h=tailleFenetre.y/6;
+
+    CaractBoutton[3].x=tailleFenetre.x/2;
+    CaractBoutton[3].y=tailleFenetre.y/6;
 }
 
 void affichageMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton){
 
     mettreFondEcranUni(rendererWindow);
 
+    affichageTexte(rendererWindow,"Entrez votre pseudo:",50,CaractBoutton[3],0,1);
     Boutton(rendererWindow,CaractBoutton[1],"  ");
     Boutton(rendererWindow,CaractBoutton[0],"Retour");
     Boutton(rendererWindow,CaractBoutton[2],"Valider");
@@ -478,9 +501,9 @@ void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie){
 
 void menuStatistiques(SDL_Renderer* rendererWindow){
     FILE* fichierStat=fopen("DAT/stat.dat","rb");
-    struct Statistiques stats[50]={NULL};
+    struct Statistiques stats[50]={0};
     int action;
-    SDL_Rect caractGraphisme[7];
+    SDL_Rect caractGraphisme[8];
     remplirCaractMenuStatistiques(rendererWindow,caractGraphisme);
 
     if(fichierStat!=NULL){
@@ -497,7 +520,7 @@ void menuStatistiques(SDL_Renderer* rendererWindow){
     issueMenuStatistiques(rendererWindow,action);
 }
 
-void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caractGraphisme[6]){
+void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caractGraphisme[8]){
     int i;
     struct coordonnees tailleFenetre;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
@@ -511,36 +534,42 @@ void remplirCaractMenuStatistiques(SDL_Renderer* rendererWindow, SDL_Rect caract
     caractGraphisme[0].w=100;
     caractGraphisme[0].h=50;
 
+    caractGraphisme[7].x=tailleFenetre.x/4;
+    caractGraphisme[7].y=tailleFenetre.x/100;
+    caractGraphisme[7].w=tailleFenetre.x/2;
+    caractGraphisme[7].h=tailleFenetre.x/2/0.71;
+
 }
 
-void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques stats[50],SDL_Rect caractGraphisme[6]){
-    struct Statistiques top[5]={NULL};
+void affichageTop5Victoire(SDL_Renderer* rendererWindow, struct Statistiques stats[50],SDL_Rect caractGraphisme[8]){
+    struct Statistiques top[5]={0};
     int i;
     char texte[50];
 
     remplirTop5(stats,top);
     mettreFondEcranUni(rendererWindow);
+    affichageImagePNG(rendererWindow, caractGraphisme[7],"DAT/Image/tableau.png");
 
     for(i=0;i<5;i++){
         if(strcmp(top[i].Pseudo,"")!=0){
             sprintf(texte,"%d. %s   %d/%d",i+1,top[i].Pseudo, top[i].NombreVictoireDefaite[0],top[i].NombreVictoireDefaite[1]);
-            affichageTexte(rendererWindow,texte,50,caractGraphisme[i+2]);
+            affichageTexte(rendererWindow,texte,50,caractGraphisme[i+2],0,0);
             printf("%s avec %d win(s)\n",top[i].Pseudo, top[i].NombreVictoireDefaite[0]);
         }
     }
-    affichageTexte(rendererWindow,"Classement",65,caractGraphisme[1]);
+    affichageTexte(rendererWindow,"Classement",65,caractGraphisme[1],0,0);
     Boutton(rendererWindow, caractGraphisme[0],"Retour");
     SDL_RenderPresent(rendererWindow);
 }
 
-void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caractGraphisme[6]){
+void affichageStatQuandPasDeFichier(SDL_Renderer* rendererWindow,SDL_Rect caractGraphisme[8]){
 
     mettreFondEcranUni(rendererWindow);
 
     printf("Aucun résultat en mémoire\n");
-    affichageTexte(rendererWindow,"Aucun resultat en memoire",50,caractGraphisme[3]);
+    affichageTexte(rendererWindow,"Aucun resultat en memoire",50,caractGraphisme[3],0,0);
 
-    affichageTexte(rendererWindow,"Classement",65,caractGraphisme[1]);
+    affichageTexte(rendererWindow,"Classement",65,caractGraphisme[1],0,0);
     Boutton(rendererWindow, caractGraphisme[0],"Retour");
     SDL_RenderPresent(rendererWindow);
 

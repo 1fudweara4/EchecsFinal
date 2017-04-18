@@ -69,6 +69,7 @@ void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartie
 void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]){
     mettreFondEcranUni(rendererWindow);
     affichageEchiquierEtPions(rendererWindow,emplacementPions);
+    affichageCarreBlanc(rendererWindow);
     affichagePseudo(rendererWindow,Nom);
     affichageNombreDePions(rendererWindow,emplacementPions);
 }
@@ -127,6 +128,27 @@ void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
     }
 }
 
+void affichageCarreBlanc(SDL_Renderer* rendererWindow){
+    struct coordonnees tailleFenetre;
+    SDL_Rect caractCarre[2];
+
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+    caractCarre[0].x=((tailleFenetre.x-tailleFenetre.y*7/8)/2)/10;
+    caractCarre[0].y=tailleFenetre.y/15*4;
+    caractCarre[0].w=((tailleFenetre.x-tailleFenetre.y*7/8)/2)/10*8;
+    caractCarre[0].h=tailleFenetre.y/9*4;
+
+    caractCarre[1].x=tailleFenetre.x-((tailleFenetre.x-tailleFenetre.y*7/8)/2)+((tailleFenetre.x-tailleFenetre.y*7/8)/2)/10;
+    caractCarre[1].y=tailleFenetre.y-tailleFenetre.y/15*2-tailleFenetre.y/9*4;
+    caractCarre[1].w=((tailleFenetre.x-tailleFenetre.y*7/8)/2)/10*8;
+    caractCarre[1].h=tailleFenetre.y/9*4;
+
+    SDL_SetRenderDrawColor(rendererWindow,187, 174, 152,255);
+    SDL_RenderFillRects(rendererWindow,caractCarre,2);
+
+}
+
+
 void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]){
     int i;
     struct coordonnees tailleFenetre;
@@ -142,10 +164,10 @@ void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]){
 
     for(i=0;i<2;i++){
         if(strcmp(&Nom[i].Nom[0],"")==0){
-            affichageTexte(rendererWindow,"Ordinateur",30,caractTextePseudo[i]);
+            affichageTexte(rendererWindow,"Ordinateur",30,caractTextePseudo[i],0,1);
         }
         else{
-            affichageTexte(rendererWindow,Nom[i].Nom,30,caractTextePseudo[i]);
+            affichageTexte(rendererWindow,Nom[i].Nom,30,caractTextePseudo[i],0,1);
         }
     }
 }
@@ -173,7 +195,7 @@ void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][
         else{
             strcat(Nb," pions");
         }
-        affichageTexte(rendererWindow,Nb,30,CaractTexte[i]);
+        affichageTexte(rendererWindow,Nb,30,CaractTexte[i],1,1);
         printf("%d pions restants\n",compterNbPions(emplacementPions,-1+2*i));
     }
 }
@@ -458,7 +480,7 @@ void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[
         case 1:
             printf("\nJoueur noir qui gagne\n");
             ajouterVictoireDefaiteAStatistiques(Nom,1,0);
-            menuFinDePartie(rendererWindow,"blanc");
+            menuFinDePartie(rendererWindow,"noir");
             break;
         case 2:
             printf("\nAppuie sur la croix fin du programme\n");
@@ -643,7 +665,6 @@ void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGag
 }
 
 void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante){
-    printf("Bite<\n\n\n\n\n");
     SDL_Rect caractObjet[3];
     int action=0;
     remplirCaractMenuFinDePartie(rendererWindow, caractObjet);
@@ -677,7 +698,13 @@ void affichageMenuFinDePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractObjet
     sprintf(Texte,"Joueur %s gagnant !",couleurGagnante);
 
     mettreFondEcranUni(rendererWindow);
-    affichageTexte(rendererWindow,Texte,70,caractObjet[0]);
+
+    if(strcmp(couleurGagnante,"blanc")==0){
+        affichageTexte(rendererWindow,Texte,70,caractObjet[0],0,0);
+    }
+    else{
+        affichageTexte(rendererWindow,Texte,70,caractObjet[0],0,1);
+    }
     Boutton(rendererWindow,caractObjet[1],"Rejouer");
     Boutton(rendererWindow,caractObjet[2],"Menu principal");
     SDL_RenderPresent(rendererWindow);

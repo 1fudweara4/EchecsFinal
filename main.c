@@ -9,7 +9,7 @@ int main(int argc, char* args[]){
     int SCREEN_HEIGHT=480;
 
     initialisationSDL();
-    window=SDL_CreateWindow("Jeu d'echecs", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window=SDL_CreateWindow("L'échec ou la réussite ?", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     verificationErreurFenetre(window);
     rendererWindow = SDL_CreateRenderer(window,-1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     verificationErreurRenderer(rendererWindow);
@@ -52,9 +52,8 @@ void initSDLttf(){ //Init SDL true type font
 }
 
 void initSDLimage(){ //Init SDL image
-    int imgFlags = IMG_INIT_PNG;
 
-    if(!(IMG_Init(IMG_INIT_PNG)) && imgFlags){
+    if(!(IMG_Init(IMG_INIT_PNG)) && !(IMG_Init(IMG_INIT_JPG)) ){
         printf("Erreur lors de l'initialisation de SDL_image. SDL_image Error: %s\n",TTF_GetError());
     }
     else{

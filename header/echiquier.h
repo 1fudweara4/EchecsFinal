@@ -15,6 +15,7 @@ void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[
 void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8]);
 void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,int y);
 void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int x,int y);
+void affichageCarreBlanc(SDL_Renderer* rendererWindow);
 void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]);
 void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][8]);
 
@@ -50,3 +51,9 @@ int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree);
 
 void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant, int joueurPerdant);
 void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2]);
+
+void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante);
+void remplirCaractMenuFinDePartie(SDL_Renderer* rendererWindow, SDL_Rect* caractObjet);
+void affichageMenuFinDePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractObjet,char* couleurGagnante);
+int actionMenuFinDePartie(SDL_Rect* caractObjet);
+void issueMenuFinDePartie(SDL_Renderer* rendererWindow,int action);

@@ -1,3 +1,4 @@
+#include "header/lib.h"
 #include"header/menus.h"
 #include"header/outils.h"
 #include "header/echiquier.h"
@@ -666,24 +667,24 @@ int actionMenuReprendrePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractBoutt
     SDL_Event event;
     Uint32 Timer;
 
-    while(!Quitter){
-        Timer=SDL_GetTicks();
-        if(SDL_PollEvent(&event)){
-                switch(event.type){
-                    case SDL_MOUSEBUTTONUP:
-                        action=actionEnFonctionCliqueMenuReprendrePartie(rendererWindow,caractBoutton,nombrePartie);
-                        if(action!=-1){
-                            Quitter=1;
-                        }
-                    break;
+        while(!Quitter){
+            Timer=SDL_GetTicks();
+            if(SDL_PollEvent(&event)){
+                    switch(event.type){
+                        case SDL_MOUSEBUTTONUP:
+                            action=actionEnFonctionCliqueMenuReprendrePartie(rendererWindow,caractBoutton,nombrePartie);
+                            if(action!=-1){
+                                Quitter=1;
+                            }
+                        break;
 
-                    default:
-                        Quitter=QuitterAppuieCroixOuEchap(event);
-                    break;
-                }
+                        default:
+                            Quitter=QuitterAppuieCroixOuEchap(event);
+                        break;
+                    }
+            }
+            PauseEnfonctionDureeExecution(Timer);
         }
-        PauseEnfonctionDureeExecution(Timer);
-    }
 
     return action;
 }

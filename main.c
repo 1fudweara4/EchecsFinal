@@ -1,3 +1,4 @@
+#include "header/lib.h"
 #include "header/main.h"
 #include"header/menus.h"
 

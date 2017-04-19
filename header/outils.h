@@ -5,11 +5,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
-struct coordonnees{
-    int x;
-    int y;
-};
-
 void mettreFondEcranUni(SDL_Renderer* rendererWindow);
 void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte);
 void affichageImageBMP(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char* NomImage);

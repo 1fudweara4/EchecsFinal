@@ -1,10 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
-
 void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree);
 
 void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistree);
@@ -15,6 +8,7 @@ void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[
 void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8]);
 void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,int y);
 void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int x,int y);
+void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]);
 void affichageCarreBlanc(SDL_Renderer* rendererWindow);
 void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]);
 void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][8]);
@@ -38,6 +32,7 @@ void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coor
 void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier, int joueurQuiJoue);
 
 int verificationConditionFin (int* causeFin, int emplacementPions[8][8],int joueurQuiJoue);
+void verificationSiJoueurGagnant(int emplacementPions[8][8],int* causeFin,int* Quitter);
 void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[8][8],struct Pseudo Nom[2],int dernierJoueurQuiAjoue);
 int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue);
 

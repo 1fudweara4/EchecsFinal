@@ -1,3 +1,4 @@
+#include "header/lib.h"
 #include "header/outils.h"
 #include"header/menus.h"
 #include "header/echiquier.h"
@@ -71,6 +72,10 @@ void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartie
 void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]){
     mettreFondEcranUni(rendererWindow);
     affichageEchiquierEtPions(rendererWindow,emplacementPions);
+    affichagePseudoEtNbPions(rendererWindow,emplacementPions,Nom);
+}
+
+void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]){
     affichageCarreBlanc(rendererWindow);
     affichagePseudo(rendererWindow,Nom);
     affichageNombreDePions(rendererWindow,emplacementPions);
@@ -241,7 +246,7 @@ void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],str
 void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin,int* dernierJoueurQuiAjoue){
 
     if(*causeFin==0){
-            if(strcmp(&Nom[joueurQuiJoue].Nom[0],"")==0){
+            if(strcmp(Nom[joueurQuiJoue].Nom,"")==0){
                 printf("Ordinateur qui joue\n");
                 lancementIA(rendererWindow,emplacementPions,joueurQuiJoue,Nom);
             }
@@ -250,7 +255,7 @@ void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],s
                 actionDuJoueur(rendererWindow,emplacementPions,joueurQuiJoue,causeFin,Nom);
                 *dernierJoueurQuiAjoue=joueurQuiJoue;
             }
-            affichageNombreDePions(rendererWindow,emplacementPions);
+            affichagePseudoEtNbPions(rendererWindow,emplacementPions,Nom);
             SDL_RenderPresent(rendererWindow);
     }
 }
@@ -452,28 +457,35 @@ void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], st
 
 int verificationConditionFin (int* causeFin, int emplacementPions[8][8],int joueurQuiJoue){
     int Quitter=0;
-    int i;
 
     if(*causeFin!=0){
         Quitter=1;
     }
     else{
-        *causeFin=verificationCasEgalite(emplacementPions,joueurQuiJoue); // met 3 si égalité
+        *causeFin=verificationCasEgalite(emplacementPions,0);
+        if(*causeFin==0){
+            *causeFin=verificationCasEgalite(emplacementPions,1); // met 3 ou  si égalité
+        }
     }
+    verificationSiJoueurGagnant(emplacementPions,causeFin,&Quitter);
 
+
+    return Quitter;
+}
+
+void verificationSiJoueurGagnant(int emplacementPions[8][8],int* causeFin,int* Quitter){
+    int i;
 
     for(i=0;i<8;i++){
         if(emplacementPions[0][i]==-1 || compterNbPions(emplacementPions,1)==0){
             *causeFin=-1;
-            Quitter=1;
+            *Quitter=1;
         }
         if(emplacementPions[7][i]==1 || compterNbPions(emplacementPions,-1)==0){
             *causeFin=1;
-            Quitter=1;
+            *Quitter=1;
         }
     }
-
-    return Quitter;
 }
 
 void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[8][8],struct Pseudo Nom[2],int dernierJoueurQuiAjoue){ //Ajouter beaucoup de paramètres
@@ -508,7 +520,7 @@ void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[
 
 int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue){
     int causeFin=3;
-    struct coordonnees propositionDeplacement[3],positionDansEchiquier;
+    struct coordonnees propositionDeplacement[3]={{-1,-1},{-1,-1},{-1,-1}},positionDansEchiquier;
 
     for(positionDansEchiquier.y=0;positionDansEchiquier.y<8;positionDansEchiquier.y++){
         for(positionDansEchiquier.x=0;positionDansEchiquier.x<8;positionDansEchiquier.x++){
@@ -520,7 +532,7 @@ int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue){
             }
         }
     }
-    printf("\n\n\n");
+    printf("Verification égalité %d\n\n\n",causeFin);
     return causeFin;
 }
 

@@ -1,3 +1,4 @@
+#include "header/lib.h"
 #include"header/outils.h"
 
 void mettreFondEcranUni(SDL_Renderer* rendererWindow){
@@ -99,7 +100,7 @@ void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rec
 
     Couleur=choixCouleur(couleurRendu);
 
-    if(Texte==""){
+    if(strcmp(Texte,"")==0){
         printf("Erreur texte non défini\n");
     }
     else{

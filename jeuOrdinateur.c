@@ -1,3 +1,4 @@
+#include "header/lib.h"
 #include "header/outils.h"
 #include"header/menus.h"
 #include "header/jeuOrdinateur.h"

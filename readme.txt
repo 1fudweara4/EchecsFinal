@@ -1,7 +1,7 @@
 Patchnotes:
 
-
--1.0 : OMG OMG IL EST LA. Jeu 1 joueur disponible ! Des bugs ont également été résolus.
+-1.0.1 : Correction de bugs.
+-1.0 : OMG OMG IL EST LA. Jeu 1 joueur disponible ! Des bugs ont également été résolu.
 -0.4.3 : Améliorations graphiques.
 -0.4.2 : Ajout du menu Options disponible via le menu principal.
 -0.4.1 : Recodage fonction génération du top 5 des joueurs dans le menu stats.

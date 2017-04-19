@@ -38,9 +38,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="header/echiquier.h" />
+		<Unit filename="header/jeuOrdinateur.h" />
 		<Unit filename="header/main.h" />
 		<Unit filename="header/menus.h" />
 		<Unit filename="header/outils.h" />
+		<Unit filename="jeuOrdinateur.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

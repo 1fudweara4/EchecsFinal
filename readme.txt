@@ -1,5 +1,7 @@
 Patchnotes:
 
+
+-1.0 : OMG OMG IL EST LA. Jeu 1 joueur disponible ! Des bugs ont également été résolus.
 -0.4.3 : Améliorations graphiques.
 -0.4.2 : Ajout du menu Options disponible via le menu principal.
 -0.4.1 : Recodage fonction génération du top 5 des joueurs dans le menu stats.
@@ -14,5 +16,5 @@ Patchnotes:
 -0.1 : Version fonctionnelle du jeu, le premier au bout du damier a gagné, mode deux joueurs seulement.
 
 Fonctionnalités à venir:
-	- Jeu un joueur face à un ordinateur (1)
+	- Amélioration IA (Prioriser finir partie)
 	- Autres ajouts surprises...

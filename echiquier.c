@@ -243,13 +243,15 @@ void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],s
     if(*causeFin==0){
             if(strcmp(&Nom[joueurQuiJoue].Nom[0],"")==0){
                 printf("Ordinateur qui joue\n");
-                /** Mettre la fonction pour l'IA **/
+                lancementIA(rendererWindow,emplacementPions,joueurQuiJoue,Nom);
             }
             else{
                 printf("Joueur 'réel' qui joue\n");
                 actionDuJoueur(rendererWindow,emplacementPions,joueurQuiJoue,causeFin,Nom);
                 *dernierJoueurQuiAjoue=joueurQuiJoue;
             }
+            affichageNombreDePions(rendererWindow,emplacementPions);
+            SDL_RenderPresent(rendererWindow);
     }
 }
 
@@ -300,7 +302,6 @@ int actionPremierCLique(SDL_Renderer* rendererWindow,int emplacementPions[8][8],
         }
         if(Quitter==1){
             deplacementPion(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue);
-            affichageNombreDePions(rendererWindow,emplacementPions);
             SDL_RenderPresent(rendererWindow);
         }
     }

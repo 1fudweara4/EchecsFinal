@@ -39,6 +39,7 @@
 		</Unit>
 		<Unit filename="header/echiquier.h" />
 		<Unit filename="header/jeuOrdinateur.h" />
+		<Unit filename="header/lib.h" />
 		<Unit filename="header/main.h" />
 		<Unit filename="header/menus.h" />
 		<Unit filename="header/outils.h" />

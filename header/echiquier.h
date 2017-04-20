@@ -4,14 +4,19 @@ void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistr
 void premierRemplissageTableauEchiquier(int emplacementPions[8][8]);
 void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartieEnregistree);
 
-void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]);
+void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue);
 void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8]);
 void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,int y);
 void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int x,int y);
-void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2]);
+void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue);
+
+void remplirCaractAvatar(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar);
 void affichageCarreBlanc(SDL_Renderer* rendererWindow);
+void affichageAvatarEnJeu(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],SDL_Rect* caractAvatar);
 void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]);
 void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][8]);
+
+
 
 int compterNbPions(int emplacementPions[8][8],int Couleur);
 
@@ -36,9 +41,9 @@ void verificationSiJoueurGagnant(int emplacementPions[8][8],int* causeFin,int* Q
 void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[8][8],struct Pseudo Nom[2],int dernierJoueurQuiAjoue);
 int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue);
 
-int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2], int* causeFin);
+int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2], int* causeFin,int joueurQuiJoue);
 void affichageMenuSauvegarder(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton);
-int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2],int action,int* causeFin);
+int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2],int action,int* causeFin,int joueurQuiJoue);
 
 void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue);
 

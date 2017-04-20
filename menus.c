@@ -3,6 +3,8 @@
 #include"header/outils.h"
 #include "header/echiquier.h"
 
+    /** MENU PRINCIPAL **/
+
 void menuPrincipal(SDL_Renderer* rendererWindow){ // Menu principal : affichage graphique puis actions
     int Action;
     SDL_Rect CaractBoutton[3];
@@ -156,7 +158,7 @@ void issueMenuPrincipal(SDL_Renderer* rendererWindow, int Action){ // Issue du m
     }
 }
 
-
+    /** MENU OPTIONS **/
 
 void menuOptions(SDL_Renderer* rendererWindow){
     int action=0;
@@ -338,6 +340,7 @@ void changementDefinition(SDL_Renderer* rendererWindow,int x,int y){
 
 }
 
+    /** MENU JOUER **/
 
 void menuJouer(SDL_Renderer* rendererWindow){
     int Action;
@@ -377,7 +380,7 @@ void issueMenuJouer(SDL_Renderer* rendererWindow, int Action){
     }
 }
 
-
+    /** MENU SELECTION NOMBRE DE JOUEURS **/
 
 void menuNombredeJoueur(SDL_Renderer* rendererWindow){
     int Action;
@@ -417,20 +420,40 @@ void issueMenuNombredeJoueur(SDL_Renderer* rendererWindow, int Action){
 }
 
 
+    /** MENU SELECTION PSEUDO **/
+
 
 void menuSelectionPseudo(SDL_Renderer* rendererWindow,int nombreDeJoueur){
     int Action;
     SDL_Rect CaractBoutton[4];
+    SDL_Rect CaractAvatar[6];
     struct Pseudo Nom[2];
 
     Nom[0].Nom[0]='\0';
     Nom[1].Nom[0]='\0';
 
     printf("Execution menuSelectionPseudo\n");
+    remplirCaractEmplacementAvatar(rendererWindow,CaractAvatar);
     remplirCaractBouttonSelectionPseudo(rendererWindow, CaractBoutton);
-    affichageMenuSelectionPseudo(rendererWindow,CaractBoutton);
-    Action=evenementMenuSelectionPseudo(rendererWindow,CaractBoutton,Nom,nombreDeJoueur);
+    affichageMenuSelectionPseudo(rendererWindow,CaractBoutton,CaractAvatar);
+    Action=evenementMenuSelectionPseudo(rendererWindow,CaractBoutton, CaractAvatar,Nom,nombreDeJoueur);
     issueMenuMenuSelectionPseudo(rendererWindow,Nom,Action);
+
+}
+
+void remplirCaractEmplacementAvatar(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar){
+    int i;
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+
+    for(i=0;i<3;i++){
+        CaractAvatar[i].w= CaractAvatar[i+3].w=tailleFenetre.y/7;
+        CaractAvatar[i].h= CaractAvatar[i+3].h=tailleFenetre.y/7;
+        CaractAvatar[i].x= CaractAvatar[i+3].x=tailleFenetre.x/10+ i*CaractAvatar[i].w +5;
+        CaractAvatar[i].y= tailleFenetre.y-tailleFenetre.y/40 - CaractAvatar[i].h*2 -5;
+
+        CaractAvatar[i+3].y=tailleFenetre.y-tailleFenetre.y/40-CaractAvatar[i+3].h;
+    }
 
 }
 
@@ -458,7 +481,7 @@ void remplirCaractBouttonSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* 
     CaractBoutton[3].y=tailleFenetre.y/6;
 }
 
-void affichageMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton){
+void affichageMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton,SDL_Rect* CaractAvatar){
 
     mettreFondEcranUni(rendererWindow);
 
@@ -466,12 +489,28 @@ void affichageMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractB
     Boutton(rendererWindow,CaractBoutton[1],"  ");
     Boutton(rendererWindow,CaractBoutton[0],"Retour");
     Boutton(rendererWindow,CaractBoutton[2],"Valider");
+
+    affichageAvatar(rendererWindow,CaractAvatar);
+    SDL_SetRenderDrawColor(rendererWindow,255, 15, 15,255);
+    SDL_RenderDrawRect(rendererWindow,&CaractAvatar[0]);
+
     SDL_RenderPresent(rendererWindow);
 }
 
-int evenementMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,struct Pseudo Nom[2], int nombreDeJoueur){
+void affichageAvatar(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar){
+    affichageImagePNG(rendererWindow,CaractAvatar[0],"DAT/Image/avatar/2.jpg");
+    affichageImagePNG(rendererWindow,CaractAvatar[1],"DAT/Image/avatar/2.jpg");
+    affichageImagePNG(rendererWindow,CaractAvatar[2],"DAT/Image/avatar/3.jpg");
+    affichageImagePNG(rendererWindow,CaractAvatar[3],"DAT/Image/avatar/4.jpg");
+    affichageImagePNG(rendererWindow,CaractAvatar[4],"DAT/Image/avatar/5.jpg");
+    affichageImagePNG(rendererWindow,CaractAvatar[5],"DAT/Image/avatar/6.jpg");
+    SDL_SetRenderDrawColor(rendererWindow,1, 1, 1,255);
+    SDL_RenderDrawRects(rendererWindow,CaractAvatar,6);
+}
+
+int evenementMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,SDL_Rect* CaractAvatar,struct Pseudo Nom[2], int nombreDeJoueur){
     SDL_Event event;
-    int Quitter=0, Action=0, NombrePseudoEntree=0,Avancement=0;
+    int Quitter=0, Action=0, NombrePseudoEntree=0,Avancement=0, avatarSelectionne=0;
     Uint32 Timer;
 
     SDL_StartTextInput();
@@ -480,7 +519,7 @@ int evenementMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractB
         if(SDL_PollEvent(&event)){
                 switch(event.type){
                     case SDL_MOUSEBUTTONUP:
-                        Quitter=actionMOUSEBUTTONUPMenuSelectionPseudo(rendererWindow,CaractBoutton,Nom,nombreDeJoueur,&NombrePseudoEntree,&Avancement,&Action);
+                        Quitter=actionMOUSEBUTTONUPMenuSelectionPseudo(rendererWindow,CaractBoutton,CaractAvatar,Nom,nombreDeJoueur,&NombrePseudoEntree,&Avancement,&Action,&avatarSelectionne);
                     break;
 
                     case SDL_TEXTINPUT:
@@ -505,21 +544,35 @@ int evenementMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractB
     return Action;
 }
 
-int actionMOUSEBUTTONUPMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,struct Pseudo Nom[2],int nombreDeJoueur,int* NombrePseudoEntree,int* Avancement,int* Action){
+int actionMOUSEBUTTONUPMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,SDL_Rect* CaractAvatar,struct Pseudo Nom[2],int nombreDeJoueur,int* NombrePseudoEntree,int* Avancement,int* Action,int* avatarSelectionne){
     struct coordonnees positionSouris;
     int Quitter=0;
-
     SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+
+    verificationCliqueSurPseudo(rendererWindow,CaractAvatar,Nom,*NombrePseudoEntree,avatarSelectionne);
+
+    Quitter=verificationCliqueBouttonValiderMenuSelectionPseudo(rendererWindow,CaractBoutton,CaractAvatar,Nom,nombreDeJoueur,NombrePseudoEntree,Avancement,Action,avatarSelectionne);
+
     if(positionSouris.x>CaractBoutton[0].x && positionSouris.x<CaractBoutton[0].x+CaractBoutton[0].w && positionSouris.y>CaractBoutton[0].y && positionSouris.y<CaractBoutton[0].y+CaractBoutton[0].h){
         *Action=1;
         Quitter=1;
     }
+    return Quitter;
+}
+
+int verificationCliqueBouttonValiderMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,SDL_Rect* CaractAvatar,struct Pseudo Nom[2],int nombreDeJoueur,int* NombrePseudoEntree,int* Avancement,int* Action,int* avatarSelectionne){
+    int Quitter=0;
+    struct coordonnees positionSouris;
+    SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+
     if(positionSouris.x>CaractBoutton[2].x && positionSouris.x<CaractBoutton[2].x+CaractBoutton[2].w && positionSouris.y>CaractBoutton[2].y && positionSouris.y<CaractBoutton[2].y+CaractBoutton[2].h){
         if(strlen(Nom[*NombrePseudoEntree].Nom)!=0){
             if(*NombrePseudoEntree!=nombreDeJoueur-1){
                 *Avancement=0;
                 *NombrePseudoEntree=1;
+                *avatarSelectionne=0;
                 Boutton(rendererWindow,CaractBoutton[1],"  ");
+                actualisationRectanglesAvatar(rendererWindow,CaractAvatar,*avatarSelectionne);
                 SDL_RenderPresent(rendererWindow);
             }
             else{
@@ -532,11 +585,60 @@ int actionMOUSEBUTTONUPMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rec
     return Quitter;
 }
 
+void verificationCliqueSurPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar, struct Pseudo Nom[2],int NombrePseudoEntree,int* avatarSelectionne){
+    int i;
+    struct coordonnees positionSouris;
+    SDL_GetMouseState(&positionSouris.x,&positionSouris.y);
+
+    for(i=0;i<6;i++){
+        if(positionSouris.x>CaractAvatar[i].x && positionSouris.x<CaractAvatar[i].x+CaractAvatar[i].w && positionSouris.y>CaractAvatar[i].y && positionSouris.y<CaractAvatar[i].y+CaractAvatar[i].h){
+            printf("Appuie sur avatar %d \n",i);
+            *avatarSelectionne=i;
+            actualisationRectanglesAvatar(rendererWindow,CaractAvatar,*avatarSelectionne);
+        }
+    }
+    modifierStructPseudoEnFonctionAvatar(Nom,NombrePseudoEntree,*avatarSelectionne);
+}
+
+void actualisationRectanglesAvatar(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar,int AvatarSelectionne){
+    affichageAvatar(rendererWindow,CaractAvatar);
+
+    SDL_SetRenderDrawColor(rendererWindow,255, 15, 15,255);
+    SDL_RenderDrawRect(rendererWindow,&CaractAvatar[AvatarSelectionne]);
+
+    SDL_RenderPresent(rendererWindow);
+}
+
+void modifierStructPseudoEnFonctionAvatar(struct Pseudo Nom[2],int NombrePseudoEntree,int avatarSelectionne){
+    switch(avatarSelectionne){
+        case 0:
+            sprintf(Nom[NombrePseudoEntree].avatar,"DAT/Image/avatar/1.jpg");
+            break;
+        case 1:
+            sprintf(Nom[NombrePseudoEntree].avatar,"DAT/Image/avatar/2.jpg");
+            break;
+        case 2:
+            sprintf(Nom[NombrePseudoEntree].avatar,"DAT/Image/avatar/3.jpg");
+            break;
+        case 3:
+            sprintf(Nom[NombrePseudoEntree].avatar,"DAT/Image/avatar/4.jpg");
+            break;
+        case 4:
+            sprintf(Nom[NombrePseudoEntree].avatar,"DAT/Image/avatar/5.jpg");
+            break;
+        case 5:
+            sprintf(Nom[NombrePseudoEntree].avatar,"DAT/Image/avatar/6.jpg");
+            break;
+    }
+}
+
 void actionTEXTINPUTMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Event event, struct Pseudo Nom[2],int NombrePseudoEntree,int* Avancement){
+
     if(*Avancement<10){
         strcat(Nom[NombrePseudoEntree].Nom, event.text.text);
         *Avancement=*Avancement+1;
     }
+
 }
 
 void actionKEYDOWNMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton, SDL_Event event,struct Pseudo Nom[2],int NombrePseudoEntree,int* Avancement){
@@ -570,7 +672,7 @@ void issueMenuMenuSelectionPseudo(SDL_Renderer* rendererWindow,struct Pseudo Nom
 }
 
 
-
+    /** FONTION POUR REDUIRE LA FREQUENCE DE REITERATION DES BOUCLES OU IL Y A L'ATTENTE D'EVENT **/
 
 int QuitterAppuieCroixOuEchap(SDL_Event event){
     int Quitter=0;
@@ -594,6 +696,8 @@ void PauseEnfonctionDureeExecution(Uint32 Timer){
     }
 }
 
+
+    /** MENU REPRENDRE PARTIE **/
 
 void menuReprendrePartie(SDL_Renderer* rendererWindow){
     int action, nombrePartie=0;
@@ -722,6 +826,7 @@ void recuperationNom(FILE* fichier, struct Pseudo Nom[2],int nombrePartie){
 }
 
 
+    /** MENU STATISTIQUES **/
 
 void menuStatistiques(SDL_Renderer* rendererWindow){
     FILE* fichierStat=fopen("DAT/stat.dat","rb");

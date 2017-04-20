@@ -1,5 +1,6 @@
 Patchnotes:
 
+-1.1 : Ajout de pseudos dans le jeu et corrections de bugs.
 -1.0.1 : Correction de bugs.
 -1.0 : OMG OMG IL EST LA. Jeu 1 joueur disponible ! Des bugs ont également été résolu.
 -0.4.3 : Améliorations graphiques.

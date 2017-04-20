@@ -19,4 +19,5 @@ struct coordonnees{
 
 struct Pseudo{
     char Nom[10];
+    char avatar[50]; // Pour plus tard B)
 };

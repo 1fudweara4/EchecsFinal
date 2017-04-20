@@ -1,7 +1,7 @@
 #include "header/lib.h"
 #include"header/outils.h"
 
-void mettreFondEcranUni(SDL_Renderer* rendererWindow){
+void mettreFondEcranUni(SDL_Renderer* rendererWindow){ // On met sur toute la surface de l'écran le fond d'écran
     struct coordonnees tailleFenetre;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
     SDL_Rect caract={0,0,tailleFenetre.x,tailleFenetre.x};
@@ -10,7 +10,7 @@ void mettreFondEcranUni(SDL_Renderer* rendererWindow){
     SDL_RenderPresent(rendererWindow);
 }
 
-void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){
+void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){ // affiche un boutton avec texte centré
 
     struct coordonnees tailleFenetre;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
@@ -51,7 +51,7 @@ void Boutton(SDL_Renderer* rendererWindow, SDL_Rect CaractSurface,char* Texte){
     textureTexte=NULL;
 }
 
-void affichageImageBMP(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char* NomImage){
+void affichageImageBMP(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char* NomImage){ //affichage image bmp
 
     SDL_Surface* Surface=NULL;
     SDL_Texture *TextureImage;
@@ -73,7 +73,7 @@ void affichageImageBMP(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char
     }
 }
 
-void affichageImagePNG(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char* NomImage){
+void affichageImagePNG(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char* NomImage){ // afifchage image png .. ou jpg
     SDL_Surface* imageChargee = IMG_Load(NomImage);
     SDL_Texture *TextureImage;
 
@@ -91,7 +91,7 @@ void affichageImagePNG(SDL_Renderer* rendererWindow,SDL_Rect CaractSurface, char
     }
 }
 
-void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rect Position,int typeRendu,int couleurRendu){
+void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rect Position,int typeRendu,int couleurRendu){ //affiche du texte à la taille voulu, à la couleur choisie et selon le rendu qu'on veut
 
     SDL_Surface* SurfaceText=NULL;
     SDL_Texture* texture;
@@ -119,7 +119,7 @@ void affichageTexte(SDL_Renderer* rendererWindow,char* Texte,int taille, SDL_Rec
     }
 }
 
-SDL_Color choixCouleur(int couleurRendu){
+SDL_Color choixCouleur(int couleurRendu){ // renvoie le sdl color en fonction couleurRendu voulu
 
     SDL_Color couleur;
 
@@ -132,7 +132,7 @@ SDL_Color choixCouleur(int couleurRendu){
     return couleur;
 }
 
-SDL_Surface* creationTexte(int typeRendu,TTF_Font* Font,char* Texte,int taille,SDL_Color Couleur){
+SDL_Surface* creationTexte(int typeRendu,TTF_Font* Font,char* Texte,int taille,SDL_Color Couleur){ //renvoie la Surface de texte en fonction du rendu voulu
 
     SDL_Surface* surfaceText;
     Font = TTF_OpenFont("DAT/chesterfield.ttf",taille);
@@ -149,7 +149,7 @@ SDL_Surface* creationTexte(int typeRendu,TTF_Font* Font,char* Texte,int taille,S
 
 }
 
-void fermetureSDLvariables(SDL_Surface* SurfaceText, TTF_Font *Font, SDL_Texture* texture){
+void fermetureSDLvariables(SDL_Surface* SurfaceText, TTF_Font *Font, SDL_Texture* texture){ // on ferme les variables sdl ouvertes et utilisés dans la fonction
     SDL_FreeSurface(SurfaceText);
     TTF_CloseFont(Font);
     SDL_DestroyTexture(texture);

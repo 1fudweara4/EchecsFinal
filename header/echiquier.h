@@ -15,7 +15,7 @@ void affichageCarreBlanc(SDL_Renderer* rendererWindow);
 void affichageAvatarEnJeu(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],SDL_Rect* caractAvatar);
 void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]);
 void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][8]);
-
+void entourerAvatarEnFonctionTour(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar, int joueurQuiJoue);
 
 
 int compterNbPions(int emplacementPions[8][8],int Couleur);

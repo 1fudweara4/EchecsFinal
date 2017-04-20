@@ -5,7 +5,7 @@
 #include "header/jeuOrdinateur.h"
 
 
-void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree){
+void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int numeroPartieEnregistree){ // Lancement de l'échiquier
 
     int emplacementPions[8][8];
 
@@ -21,16 +21,16 @@ void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int nu
 }
 
 
-void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistree){
-    if(numeroPartieEnregistree==0){
+void initalisationEchiquier(int emplacementPions[8][8],int numeroPartieEnregistree){ // On init le tableau où il y a les pions
+    if(numeroPartieEnregistree==0){ // Si on commence une nouvelle partie
         premierRemplissageTableauEchiquier(emplacementPions);
     }
-    else{
+    else{ // sinon on reprend partie
         recuperationEchiquiersauvegarde(emplacementPions,numeroPartieEnregistree);
     }
 }
 
-void premierRemplissageTableauEchiquier(int emplacementPions[8][8]){
+void premierRemplissageTableauEchiquier(int emplacementPions[8][8]){ // premier remplissage du tableau
     int i,j;
     for(i=0;i<8;i++){
         for(j=0;j<8;j++){
@@ -52,30 +52,35 @@ void premierRemplissageTableauEchiquier(int emplacementPions[8][8]){
     printf("Echiquier rempli\n");
 }
 
-void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartieEnregistree){
+void recuperationEchiquiersauvegarde(int emplacementPions[8][8],int numeroPartieEnregistree){ //recupération du tableau dans le fichier sauvegardeEmplacement.dat
     int i;
     int emplacement[64];
-    FILE* fichierEmplacement=fopen("DAT/sauvegardeEmplacement.dat","rb");
+    FILE* fichierEmplacement=fopen("DAT/sauvegardeEmplacement.dat","rb"); //ouverture en lecture binaire
 
 
-    fseek(fichierEmplacement, sizeof(emplacement)*(numeroPartieEnregistree-1), SEEK_SET);
-    fread(emplacement,sizeof(int),64,fichierEmplacement);
+    fseek(fichierEmplacement, sizeof(emplacement)*(numeroPartieEnregistree-1), SEEK_SET); // on met le curseur à l'enplacement la partie select
+    fread(emplacement,sizeof(int),64,fichierEmplacement); // On avait des probs avec récupération de tableau 2 dim. donc on sauvegarde en tableau à une dim
 
     for(i=0;i<64;i++){
-        emplacementPions[i/8][i%8]=emplacement[i]   ;
+        emplacementPions[i/8][i%8]=emplacement[i];
         printf("%d |",emplacement[i]);
     }
     fclose(fichierEmplacement);
 }
 
 
-void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue){
+void affichagePartieEchiquier(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue){ //affichage de tout l'écran lors de la partie d'echiquier
+    struct coordonnees tailleFenetre;
+    SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
+    SDL_Rect positionTexte={tailleFenetre.x/2, tailleFenetre.y/40,0,0};
+
     mettreFondEcranUni(rendererWindow);
+    affichageTexte(rendererWindow,"Appuyez sur Echap pour sauvegarder ou quitter.",30,positionTexte,0,1);
     affichageEchiquierEtPions(rendererWindow,emplacementPions);
     affichagePseudoEtNbPions(rendererWindow,emplacementPions,Nom,joueurQuiJoue);
 }
 
-void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue){
+void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue){ // On affiche les carrés sur les cotés ou il y a l'avatar, le nom et le nombre de pions
     SDL_Rect caractAvatar[2];
 
     remplirCaractAvatar(rendererWindow, caractAvatar);
@@ -86,7 +91,7 @@ void affichagePseudoEtNbPions(SDL_Renderer* rendererWindow,int emplacementPions[
     entourerAvatarEnFonctionTour(rendererWindow,caractAvatar,joueurQuiJoue);
 }
 
-void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8]){
+void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions[8][8]){ //affichage de l'échiquier
     int i,j;
 
     for(i=0;i<8;i++){
@@ -97,7 +102,7 @@ void affichageEchiquierEtPions(SDL_Renderer* rendererWindow,int emplacementPions
     }
 }
 
-void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,int y){
+void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,int y){ // en fonction de la coordonnée en paramètre on affiche la couleur de la case
     struct coordonnees tailleFenetre;
     SDL_Rect CaractCase;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
@@ -124,7 +129,7 @@ void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,i
 
 }
 
-void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int x,int y){
+void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int x,int y){ // On affiche le pion en fonction de la valeur dans le tableau emplacementPions en x y
     struct coordonnees tailleFenetre;
     SDL_Rect CaractCase;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
@@ -140,7 +145,7 @@ void affichagePions(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
     }
 }
 
-void remplirCaractAvatar(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar){
+void remplirCaractAvatar(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar){ // On rempli le sdl rect qui contient l'emplacement des deux avatars
     struct coordonnees tailleFenetre;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
 
@@ -152,7 +157,7 @@ void remplirCaractAvatar(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar){
     caractAvatar[1].y=tailleFenetre.y/9*5;
 }
 
-void affichageCarreBlanc(SDL_Renderer* rendererWindow){
+void affichageCarreBlanc(SDL_Renderer* rendererWindow){ // On affiche le carré qui est arrière plan
     struct coordonnees tailleFenetre;
     SDL_Rect caractCarre[2];
 
@@ -175,21 +180,21 @@ void affichageCarreBlanc(SDL_Renderer* rendererWindow){
 
 }
 
-void affichageAvatarEnJeu(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],SDL_Rect* caractAvatar){
+void affichageAvatarEnJeu(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],SDL_Rect* caractAvatar){ // On affiche les avatars
     int i;
 
     for(i=0;i<2;i++){
 
-        if(strcmp(Nom[i].Nom,"")==0){
+        if(strcmp(Nom[i].Nom,"")==0){ // si le nom d'un joueur est nul alors c'est un ordi donc on met l'avatar en conséquence
             affichageImagePNG(rendererWindow,caractAvatar[i],"DAT/Image/avatar/ordi.png");
         }
-        else{
+        else{ // si c'est un joueur réel alors on met son avatar qu'il a choisit
             affichageImagePNG(rendererWindow,caractAvatar[i],Nom[i].avatar);
         }
     }
 }
 
-void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]){
+void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]){ // on affiche le pseudo
     int i;
     struct coordonnees tailleFenetre;
     SDL_Rect caractTextePseudo[2];
@@ -203,7 +208,7 @@ void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]){
     caractTextePseudo[0].y=tailleFenetre.y/3*2;
 
     for(i=0;i<2;i++){
-        if(strcmp(&Nom[i].Nom[0],"")==0){
+        if(strcmp(Nom[i].Nom,"")==0){ // si le pseudo est null alors c'est un ordi
             affichageTexte(rendererWindow,"Ordinateur",30,caractTextePseudo[i],0,1);
         }
         else{
@@ -212,7 +217,7 @@ void affichagePseudo(SDL_Renderer*rendererWindow,struct Pseudo Nom[2]){
     }
 }
 
-void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][8]){
+void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][8]){ //affichage du nombre de pions d'un joueur
     int i;
     struct coordonnees tailleFenetre;
     SDL_Rect CaractTexte[2];
@@ -240,14 +245,14 @@ void affichageNombreDePions(SDL_Renderer*rendererWindow,int emplacementPions[8][
     }
 }
 
-void entourerAvatarEnFonctionTour(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar, int joueurQuiJoue){
+void entourerAvatarEnFonctionTour(SDL_Renderer* rendererWindow, SDL_Rect* caractAvatar, int joueurQuiJoue){ // On entoure en rouge l'avatar du joueur qui joue
 
     SDL_SetRenderDrawColor(rendererWindow,255, 0,0,255);
     SDL_RenderDrawRect(rendererWindow,&caractAvatar[joueurQuiJoue]);
 }
 
 
-int compterNbPions(int emplacementPions[8][8],int Couleur){
+int compterNbPions(int emplacementPions[8][8],int Couleur){ //compte le nombre de pions pour le joueur mis en paramètre et le renvoie
     int NombreDePions=0,i,j;
 
     for(i=0;i<8;i++){
@@ -262,10 +267,10 @@ int compterNbPions(int emplacementPions[8][8],int Couleur){
 
 
 
-void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int numeroPartieEnregistree){
+void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int numeroPartieEnregistree){ // lance la partie
     int i,Quitter=0,causeFin=0, dernierJoueurQuiAjoue;
 
-    if(numeroPartieEnregistree!=0 && ajoutTourEventuelPourSauvegarde(numeroPartieEnregistree)==1){
+    if(numeroPartieEnregistree!=0 && ajoutTourEventuelPourSauvegarde(numeroPartieEnregistree)==1){ // si il y a reprise d'une partie sauvegardée et que c'était lors du deuxième tour que l'on avait sauvegardé
         deroulementDuTour(rendererWindow,emplacementPions,Nom,1,&causeFin,&dernierJoueurQuiAjoue);
         Quitter=verificationConditionFin(&causeFin, emplacementPions,1);
     }
@@ -279,25 +284,25 @@ void lancementPartie(SDL_Renderer* rendererWindow,int emplacementPions[8][8],str
     issuePartie(rendererWindow,causeFin,emplacementPions,Nom,dernierJoueurQuiAjoue);
 }
 
-void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin,int* dernierJoueurQuiAjoue){
+void deroulementDuTour(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue,int* causeFin,int* dernierJoueurQuiAjoue){ // on sépare ici les tours ordi et les tours humains
 
-    if(*causeFin==0){
-            affichagePseudoEtNbPions(rendererWindow,emplacementPions,Nom,joueurQuiJoue);
+    if(*causeFin==0){ // si il n'y aucune cause qui olige la partie a se finir alors
+            affichagePseudoEtNbPions(rendererWindow,emplacementPions,Nom,joueurQuiJoue); // on actualise
             SDL_RenderPresent(rendererWindow);
 
-            if(strcmp(Nom[joueurQuiJoue].Nom,"")==0){
+            if(strcmp(Nom[joueurQuiJoue].Nom,"")==0){ // si c'est un ordi
                 printf("Ordinateur qui joue\n");
-                lancementIA(rendererWindow,emplacementPions,joueurQuiJoue,Nom);
+                lancementIA(rendererWindow,emplacementPions,joueurQuiJoue,Nom); // on lance """"""""" l'ia """""""""
             }
             else{
                 printf("Joueur 'réel' qui joue\n");
-                actionDuJoueur(rendererWindow,emplacementPions,joueurQuiJoue,causeFin,Nom);
+                actionDuJoueur(rendererWindow,emplacementPions,joueurQuiJoue,causeFin,Nom); // on lance la suite d'event pour le tour d'un joueur
                 *dernierJoueurQuiAjoue=joueurQuiJoue;
             }
     }
 }
 
-void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin,struct Pseudo Nom[2]){
+void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin,struct Pseudo Nom[2]){ // On attend qu'il clique sur l'une des cases de l'échiquier
     int Quitter=0;
     SDL_Event event;
     Uint32 Timer;
@@ -316,7 +321,7 @@ void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
                     Quitter=actionPremierCLique(rendererWindow,emplacementPions,joueurQuiJoue,causeFin);
                     break;
                 case SDL_KEYUP:
-                    if ( event.key.keysym.sym == SDLK_ESCAPE ){
+                    if ( event.key.keysym.sym == SDLK_ESCAPE ){ // si appuie sur echap
                         Quitter=menuSauvegarder(rendererWindow,emplacementPions,Nom, causeFin,joueurQuiJoue);
                     }
                     break;
@@ -326,18 +331,18 @@ void actionDuJoueur(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int 
     }
 }
 
-int actionPremierCLique(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin){
+int actionPremierCLique(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,int* causeFin){ // si on a appuie sur la souris
     int Quitter=0;
     struct coordonnees propositionDeplacement[3]={{-1,-1},{-1,-1},{-1,-1}};
     struct coordonnees positionDansEchiquier=detectionEmplacementDuCliqueDansEchiquier(rendererWindow);
 
-    if(emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]==joueurQuiJoue+(joueurQuiJoue-1)){ //0=>-1 et 1=>1
-        generationPropositionDeplacement(emplacementPions,positionDansEchiquier,propositionDeplacement,joueurQuiJoue);
+    if(emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]==joueurQuiJoue+(joueurQuiJoue-1)){ //0=>-1 et 1=>1     ///Si on a appuié sur l'un de nos pions
+        generationPropositionDeplacement(emplacementPions,positionDansEchiquier,propositionDeplacement,joueurQuiJoue); //On génére les propositions
         printf("%d %d\n",propositionDeplacement[0].x,propositionDeplacement[0].y);
         printf("%d %d\n",propositionDeplacement[1].x,propositionDeplacement[1].y);
         printf("%d %d\n",propositionDeplacement[2].x,propositionDeplacement[2].y);
 
-        if(verificationSiIlyaPossibilites(propositionDeplacement)){
+        if(verificationSiIlyaPossibilites(propositionDeplacement)){ // Il il y a des possiblités alors :
         affichagePropositionDeplacement(rendererWindow,propositionDeplacement);
         Quitter=actionsDeplacement(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue,causeFin);
         SuppressionPropositionsDeplacement(rendererWindow,propositionDeplacement,emplacementPions);
@@ -350,7 +355,7 @@ int actionPremierCLique(SDL_Renderer* rendererWindow,int emplacementPions[8][8],
     return Quitter;
 }
 
-struct coordonnees detectionEmplacementDuCliqueDansEchiquier(SDL_Renderer* rendererWindow){
+struct coordonnees detectionEmplacementDuCliqueDansEchiquier(SDL_Renderer* rendererWindow){ // On regarde si le clique était dans l'échiquier si oui alors on met en struct le x y de la case cliquée
     struct coordonnees positionClique,tailleFenetre;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
     SDL_GetMouseState(&positionClique.x,&positionClique.y);
@@ -369,16 +374,16 @@ struct coordonnees detectionEmplacementDuCliqueDansEchiquier(SDL_Renderer* rende
     return positionClique;
 }
 
-void generationPropositionDeplacement(int emplacementPions[8][8],struct coordonnees positionDansEchiquier, struct coordonnees propositionDeplacement[3],int joueurQuiJoue){
+void generationPropositionDeplacement(int emplacementPions[8][8],struct coordonnees positionDansEchiquier, struct coordonnees propositionDeplacement[3],int joueurQuiJoue){ // On met dans propositionDeplacement les déplacements possibles
     int i;
-    for(i=-1;i<2;i=i+2){
+    for(i=-1;i<2;i=i+2){ // On va remplir les conditions pour les déplacements latéraux si il y a un pion adverse
         if(positionDansEchiquier.x+i>=0 && positionDansEchiquier.x+i<8 && positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]>=0 && positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]<8){
             if(emplacementPions[positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]][positionDansEchiquier.x+i]!=0 && emplacementPions[positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]][positionDansEchiquier.x+i]!=joueurQuiJoue+(joueurQuiJoue-1)){
                 propositionDeplacement[1+i].x=positionDansEchiquier.x+i;
                 propositionDeplacement[1+i].y=positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x];
             }
         }
-    }
+    } // On rempli le mouvement avant si il n'y a pas de pions adverse
     if(positionDansEchiquier.x>=0 && positionDansEchiquier.x<8 && positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]>=0 && positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]<8){
         if(emplacementPions[positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]][positionDansEchiquier.x]==0){
             propositionDeplacement[1].x=positionDansEchiquier.x;
@@ -387,7 +392,7 @@ void generationPropositionDeplacement(int emplacementPions[8][8],struct coordonn
     }
 }
 
-void affichagePropositionDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3]){
+void affichagePropositionDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3]){ // on affiche une petite image montrant les déplacements possibles
 
     int i;
     struct coordonnees tailleFenetre;
@@ -407,7 +412,7 @@ void affichagePropositionDeplacement(SDL_Renderer* rendererWindow,struct coordon
 
 }
 
-int verificationSiIlyaPossibilites(struct coordonnees propositionDeplacement[3]){
+int verificationSiIlyaPossibilites(struct coordonnees propositionDeplacement[3]){ // fonction qui vérifie si des déplacements sont possibles, renvoie 0 si il n'y en a pas
     int i,possibiliteExistante=0;
 
     for(i=0;i<3;i++){
@@ -419,7 +424,7 @@ int verificationSiIlyaPossibilites(struct coordonnees propositionDeplacement[3])
     return possibiliteExistante;
 }
 
-int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier,int joueurQuiJoue, int* causeFin){
+int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier,int joueurQuiJoue, int* causeFin){ //event quand on a clique une première fois sur un pion et qu'il y a les propositions affichées
     SDL_Event event;
     int Quitter=0,Quitter1=0;
     Uint32 Timer;
@@ -430,18 +435,18 @@ int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],
             switch(event.type){
                 case SDL_MOUSEBUTTONUP:
                     Quitter=evenementCliqueDemandeProposition(rendererWindow, emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue);
-                    Quitter1=1;
+                    Quitter1=1; // si on a fait un clique on quite forcement cette boucle et on passe peu être au tour de l'autre joueur si Quitter=1
                     break;
 
                 case SDL_WINDOWEVENT:
                     if(event.window.event == SDL_WINDOWEVENT_CLOSE){
-                        Quitter1=1;
+                        Quitter1=1; // Si on appuie sur croix ON ARRETE TOUT !
                         Quitter=1;
                         *causeFin=2;
                     }
                     break;
                 case SDL_KEYUP:
-                    if(event.key.keysym.sym == SDLK_ESCAPE){
+                    if(event.key.keysym.sym == SDLK_ESCAPE){ // si on appuie sur echap alors on quitte seulement cette boucle donc on doit reselec un pion
                         Quitter1=1;
                     }
                     break;
@@ -452,7 +457,7 @@ int actionsDeplacement(SDL_Renderer* rendererWindow, int emplacementPions[8][8],
     return Quitter;
 }
 
-int evenementCliqueDemandeProposition(SDL_Renderer* rendererWindow, int emplacementPions[8][8],struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier,int joueurQuiJoue){
+int evenementCliqueDemandeProposition(SDL_Renderer* rendererWindow, int emplacementPions[8][8],struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier,int joueurQuiJoue){ // On vérifie si durant la deuxième vague d'attente de clique, le joueur a cliqué sur une des propositions
     int i,Quitter=0;
     struct coordonnees positionCurseur,tailleEcran;
     SDL_GetRendererOutputSize(rendererWindow,&tailleEcran.x,&tailleEcran.y);
@@ -465,14 +470,14 @@ int evenementCliqueDemandeProposition(SDL_Renderer* rendererWindow, int emplacem
                 emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]=0;
                 printf("Mise en case %d %d de la valeur %d \n",propositionDeplacement[i].x, propositionDeplacement[i].y, joueurQuiJoue+(joueurQuiJoue-1));
                 printf("Mise en case %d %d de la valeur 0\n",positionDansEchiquier.x,positionDansEchiquier.y);
-                Quitter=1;
+                Quitter=1; // Si le joueur à cliquer sur l'une des proposiitons alors on modifie le tableau avec les pions et on quitte les deux boucles pour aller au tour suivant
             }
         }
     }
     return Quitter;
 }
 
-void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3],int emplacementPions[8][8]){
+void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coordonnees propositionDeplacement[3],int emplacementPions[8][8]){ // On réactualise les cases où l'on avait affiché les propositions pour supprimier les images que l'on avait mises
     int i;
     for(i=0;i<3;i++){
         if(propositionDeplacement[i].x!=-1){
@@ -483,7 +488,7 @@ void SuppressionPropositionsDeplacement(SDL_Renderer* rendererWindow,struct coor
     SDL_RenderPresent(rendererWindow);
 }
 
-void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier, int joueurQuiJoue){
+void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct coordonnees propositionDeplacement[3],struct coordonnees positionDansEchiquier, int joueurQuiJoue){ //mise à jour de l'emplacement des pions
     int i;
     for(i=0;i<3;i++){
         affichagePions(rendererWindow,emplacementPions,propositionDeplacement[i].x,propositionDeplacement[i].y);
@@ -492,40 +497,40 @@ void deplacementPion(SDL_Renderer* rendererWindow,int emplacementPions[8][8], st
     affichagePions(rendererWindow,emplacementPions,positionDansEchiquier.x,positionDansEchiquier.y);
 }
 
-int verificationConditionFin (int* causeFin, int emplacementPions[8][8],int joueurQuiJoue){
+int verificationConditionFin (int* causeFin, int emplacementPions[8][8],int joueurQuiJoue){ //vérification si l'une des conditions de fin est remplie
     int Quitter=0;
 
-    if(*causeFin!=0){
+    if(*causeFin!=0){ // si la condition de fin est déjà !=0 alors on quitte la boucle joueur 0/1/0/1/0/.....
         Quitter=1;
     }
     else{
-        *causeFin=verificationCasEgalite(emplacementPions,0);
+        *causeFin=verificationCasEgalite(emplacementPions,0); // On vérifie si il y a égalité pour le joueur 0 si oui on met 3
         if(*causeFin==0){
-            *causeFin=verificationCasEgalite(emplacementPions,1); // met 3 ou  si égalité
+            *causeFin=verificationCasEgalite(emplacementPions,1); // on vérifie si il y a égalité pour le joueur 1 si oui on met 3
         }
     }
-    verificationSiJoueurGagnant(emplacementPions,causeFin,&Quitter);
+    verificationSiJoueurGagnant(emplacementPions,causeFin,&Quitter); // vérification si l'un des joueurs a atteind le bord du dammier
 
 
     return Quitter;
 }
 
-void verificationSiJoueurGagnant(int emplacementPions[8][8],int* causeFin,int* Quitter){
+void verificationSiJoueurGagnant(int emplacementPions[8][8],int* causeFin,int* Quitter){ // vérification si l'un des joueurs a atteind le bord du dammier
     int i;
 
     for(i=0;i<8;i++){
-        if(emplacementPions[0][i]==-1 || compterNbPions(emplacementPions,1)==0){
+        if(emplacementPions[0][i]==-1 || compterNbPions(emplacementPions,1)==0){ // On verifie la ligne du haut
             *causeFin=-1;
             *Quitter=1;
         }
-        if(emplacementPions[7][i]==1 || compterNbPions(emplacementPions,-1)==0){
+        if(emplacementPions[7][i]==1 || compterNbPions(emplacementPions,-1)==0){ // et la ligne du bas
             *causeFin=1;
             *Quitter=1;
         }
     }
 }
 
-void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[8][8],struct Pseudo Nom[2],int dernierJoueurQuiAjoue){ //Ajouter beaucoup de paramètres
+void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[8][8],struct Pseudo Nom[2],int dernierJoueurQuiAjoue){ // issue en fonction de causefin
     switch(causeFin){
         case -1:
             printf("\nJoueur blanc qui gagne\n");
@@ -556,16 +561,16 @@ void issuePartie(SDL_Renderer* rendererWindow,int causeFin,int emplacementPions[
     }
 }
 
-int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue){
+int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue){ // on vérifie les cas d'égalitéq
     int causeFin=3;
     struct coordonnees propositionDeplacement[3]={{-1,-1},{-1,-1},{-1,-1}},positionDansEchiquier;
 
     for(positionDansEchiquier.y=0;positionDansEchiquier.y<8;positionDansEchiquier.y++){
-        for(positionDansEchiquier.x=0;positionDansEchiquier.x<8;positionDansEchiquier.x++){
-            if(emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]==joueurQuiJoue+(joueurQuiJoue-1)){
-                    generationPropositionDeplacement(emplacementPions,positionDansEchiquier,propositionDeplacement,joueurQuiJoue);
-                    if(verificationSiIlyaPossibilites(propositionDeplacement)){
-                        causeFin=0;
+        for(positionDansEchiquier.x=0;positionDansEchiquier.x<8;positionDansEchiquier.x++){ // pour toutes les cases du dammier
+            if(emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x]==joueurQuiJoue+(joueurQuiJoue-1)){ // si c'est le pion d'un des joueurs
+                    generationPropositionDeplacement(emplacementPions,positionDansEchiquier,propositionDeplacement,joueurQuiJoue); // On génére les propositions de déplacement
+                    if(verificationSiIlyaPossibilites(propositionDeplacement)){ // si il a une possibilité
+                        causeFin=0; // pas de cause de fin !
                     }
             }
         }
@@ -577,7 +582,7 @@ int verificationCasEgalite(int emplacementPions[8][8],int joueurQuiJoue){
 
 
 
-int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2], int* causeFin,int joueurQuiJoue){
+int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2], int* causeFin,int joueurQuiJoue){ // menu sauvegarder  affichage puis actions
     int Quitter;
     int action;
 
@@ -591,7 +596,7 @@ int menuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], str
     return Quitter;
 }
 
-void affichageMenuSauvegarder(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){
+void affichageMenuSauvegarder(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton){ //affichage du menu sauvegarder
 
     mettreFondEcranUni(rendererWindow);
 
@@ -601,7 +606,7 @@ void affichageMenuSauvegarder(SDL_Renderer* rendererWindow, SDL_Rect* CaractBout
     SDL_RenderPresent(rendererWindow);
 }
 
-int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2],int action,int* causeFin,int joueurQuiJoue){
+int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8], struct Pseudo Nom[2],int action,int* causeFin,int joueurQuiJoue){ // issue du menu sauvegarder
     int Quitter;
     switch(action){
     case 0:
@@ -632,26 +637,26 @@ int issueMenuSauvegarder(SDL_Renderer* rendererWindow,int emplacementPions[8][8]
 
 
 
-void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue){
+void sauvegardePartie(int emplacementPions[8][8], struct Pseudo Nom[2], int JoueurQuiJoue){ // on sauvegarde la partie dans un fichier
     int i, emplacement[64];
     FILE* fichierNom=fopen("DAT/sauvegardeNom.dat","ab");
-    FILE* fichierEmplacement=fopen("DAT/sauvegardeEmplacement.dat","ab");
-    FILE* fichierTour=fopen("DAT/sauvegardeTour.dat","ab");
+    FILE* fichierEmplacement=fopen("DAT/sauvegardeEmplacement.dat","ab"); // ouvertures en ajout
+    FILE* fichierTour=fopen("DAT/sauvegardeTour.dat","ab"); // que des ouvertures en binaire !!!!!!!
 
     for(i=0;i<64;i++){
-        emplacement[i]=emplacementPions[i/8][i%8];
+        emplacement[i]=emplacementPions[i/8][i%8]; // On passe en tableau 1 dim car prob en deux dims
     }
 
     fwrite(Nom,sizeof(struct Pseudo),2,fichierNom);
     fwrite(emplacement,sizeof(int),64,fichierEmplacement);
-    fwrite(&JoueurQuiJoue,sizeof(int),1,fichierTour);
+    fwrite(&JoueurQuiJoue,sizeof(int),1,fichierTour); // On écrit dans les 3 fichiers et on les ferme
 
     fclose(fichierNom);
     fclose(fichierEmplacement);
     fclose(fichierTour);
 }
 
-int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree){
+int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree){ // renvoie 1 pour le numéro de la partie envoyée dans le fichier sauvegardeTour il y a 1
     int TourSuplementaire;
     FILE* fichierTour=fopen("DAT/sauvegardeTour.dat","rb");
 
@@ -664,25 +669,25 @@ int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree){
 }
 
 
-void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant, int joueurPerdant){
-    FILE* fichierStats=fopen("DAT/stat.dat","rb");
+void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant, int joueurPerdant){ // On ajoute les victoires défaites au fichier stats
+    FILE* fichierStats=fopen("DAT/stat.dat","rb"); // Mode lecture binaire
     struct Statistiques stats[50]={0};
 
-    if(fichierStats!=NULL){
+    if(fichierStats!=NULL){ // si le fichier est présent
 
         fread(stats,sizeof(struct Statistiques),50,fichierStats);
         fclose(fichierStats);
-    }
-    fichierStats=fopen("DAT/stat.dat","wb+");
+    } // On prend le fichier dans une struct
+    fichierStats=fopen("DAT/stat.dat","wb+"); // on réini le fichier
     mettreNomEtVictoireDansTableau(stats,joueurGagnant,joueurPerdant,Nom);
     fwrite(stats,sizeof(struct Statistiques),50,fichierStats);
     fclose(fichierStats);
 }
 
-void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2]){
+void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2]){ // On met la victoire défaite au pseudo du joueur
     int i,Quitter,j=0,correspondance[2]={0,0};
 
-    for(i=0;i<50;i++){
+    for(i=0;i<50;i++){ // Si le joueur est déjà présent dans le fichier alors on va ajouter la victoire/défaite
         if(strcmp(Nom[joueurGagnant].Nom,"")!=0 && strcmp(stats[i].Pseudo,Nom[joueurGagnant].Nom)==0){
             stats[i].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0]+1;
             printf("Ajout 1 victoire a %s. Mtn %d victoire(s)\n",stats[i].Pseudo,stats[i].NombreVictoireDefaite[0]);
@@ -695,7 +700,7 @@ void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGag
         }
     }
 
-    for(i=0;i<2;i++){
+    for(i=0;i<2;i++){ //sinon on ajoute a un emplacement libre le nom du jeu et sa victoire/defaite
         if(correspondance[i]==0){
             Quitter=0;
             j=0;
@@ -720,7 +725,7 @@ void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGag
     }
 }
 
-void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante){
+void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante){ // menu qui apparait quand on a fini une partie
     SDL_Rect caractObjet[3];
     int action=0;
     remplirCaractMenuFinDePartie(rendererWindow, caractObjet);
@@ -729,7 +734,7 @@ void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante){
     issueMenuFinDePartie(rendererWindow,action);
 }
 
-void remplirCaractMenuFinDePartie(SDL_Renderer* rendererWindow, SDL_Rect* caractObjet){
+void remplirCaractMenuFinDePartie(SDL_Renderer* rendererWindow, SDL_Rect* caractObjet){ // on rempli les sdl caract pour les elements visuels
     struct coordonnees tailleFenetre;
     SDL_GetRendererOutputSize(rendererWindow,&tailleFenetre.x,&tailleFenetre.y);
 
@@ -748,14 +753,14 @@ void remplirCaractMenuFinDePartie(SDL_Renderer* rendererWindow, SDL_Rect* caract
 
 }
 
-void affichageMenuFinDePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractObjet,char* couleurGagnante){
+void affichageMenuFinDePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractObjet,char* couleurGagnante){ //affichage visuel du menu
     char Texte[25];
 
     sprintf(Texte,"Joueur %s gagnant !",couleurGagnante);
 
     mettreFondEcranUni(rendererWindow);
 
-    if(strcmp(couleurGagnante,"blanc")==0){
+    if(strcmp(couleurGagnante,"blanc")==0){ //en fonction du texte envoyé en paramètre on écrit la bonne sortie
         affichageTexte(rendererWindow,Texte,70,caractObjet[0],0,0);
     }
     else if(strcmp(couleurGagnante,"noir")==0){
@@ -769,7 +774,7 @@ void affichageMenuFinDePartie(SDL_Renderer* rendererWindow,SDL_Rect* caractObjet
     SDL_RenderPresent(rendererWindow);
 }
 
-int actionMenuFinDePartie(SDL_Rect* caractObjet){
+int actionMenuFinDePartie(SDL_Rect* caractObjet){ // attente d'actions dans le menu
     int action,i,Quitter=0;
     struct coordonnees positionSouris;
     SDL_Event event;
@@ -801,7 +806,7 @@ int actionMenuFinDePartie(SDL_Rect* caractObjet){
     return action;
 }
 
-void issueMenuFinDePartie(SDL_Renderer* rendererWindow,int action){
+void issueMenuFinDePartie(SDL_Renderer* rendererWindow,int action){ // issues en fonction de la variable action
     switch(action){
     case 0:
         printf("Fin du programme\n");

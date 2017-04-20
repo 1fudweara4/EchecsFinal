@@ -4,20 +4,20 @@
 #include "header/jeuOrdinateur.h"
 #include "header/echiquier.h"
 
-void lancementIA(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,struct Pseudo Nom[2]){
+void lancementIA(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,struct Pseudo Nom[2]){ //lancement de """"" l'ia""""""
     struct evaluationIA evaluationPossibilites[8][8];
     struct coordonnees meilleurDeplacement;
 
     printf("Lancement IA\n");
 
-    printf("\nCalcul des possibilités...bip..bip\n");
+    printf("\nCalcul des possibilités...bip..bip\n"); // lol
     evaluationDesPossibilites(emplacementPions,evaluationPossibilites,joueurQuiJoue);
-    printf("\nSelection meilleure possibilité...bip..bip\n");
+    printf("\nSelection meilleure possibilité...bip..bip\n"); // re lol
     meilleurDeplacement=selectionMeilleurePossibilite(evaluationPossibilites);
     deplacementPionEnMeilleurePossibilite(rendererWindow, emplacementPions,evaluationPossibilites,meilleurDeplacement,joueurQuiJoue);
 }
 
-void evaluationDesPossibilites(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue){
+void evaluationDesPossibilites(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue){ //on met une note a a tous les pions de notre couleur en fonction des déplacements possibles et on met ce déplacement dans une variable
     int i,j;
     struct coordonnees emplacementInitial, propositionDeplacement[3];
 
@@ -45,7 +45,7 @@ void reinitilisationPropositionDeplacement(struct coordonnees propositionDeplace
     }
 }
 
-void generationDeLaNote(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]){
+void generationDeLaNote(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]){ // On génére la note en fonction de certains paramètres
 
     if(propositionDeplacement[0].x!=-1 || propositionDeplacement[2].x!=-1){
             noteDeplacementHorizontaux(emplacementPions,evaluationPossibilites,joueurQuiJoue,emplacementInitial,propositionDeplacement);
@@ -62,7 +62,7 @@ void generationDeLaNote(int emplacementPions[8][8],struct evaluationIA evaluatio
     }
 }
 
-void noteDeplacementHorizontaux(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]){
+void noteDeplacementHorizontaux(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]){ // On note les déplacement horizontaux, il y a les deux déplacements posisbles on va toujours prendre celui de droite (Pourquoi? Parce que.)
 
     if(propositionDeplacement[0].x!=-1){
 
@@ -80,7 +80,7 @@ void noteDeplacementHorizontaux(int emplacementPions[8][8],struct evaluationIA e
     }
 }
 
-struct coordonnees selectionMeilleurePossibilite(struct evaluationIA evaluationPossibilites[8][8]){
+struct coordonnees selectionMeilleurePossibilite(struct evaluationIA evaluationPossibilites[8][8]){ //fonction qui renvoie la meilleure possibilité quand elle a le tableau contenant les notes des déplacements
     int noteMax,nombreNoteMax;
     struct coordonnees meilleurDeplacement;
 
@@ -93,7 +93,7 @@ struct coordonnees selectionMeilleurePossibilite(struct evaluationIA evaluationP
     return meilleurDeplacement;
 }
 
-void rechercheNoteMaxEtNombreIteration(struct evaluationIA evaluationPossibilites[8][8],int* noteMax, int* nombreNoteMax){
+void rechercheNoteMaxEtNombreIteration(struct evaluationIA evaluationPossibilites[8][8],int* noteMax, int* nombreNoteMax){ // on regarde quelle est la meilleure note et le nombre de fois qu'elle est présente
     int i,j;
     *noteMax=0;
     *nombreNoteMax=0;
@@ -113,7 +113,7 @@ void rechercheNoteMaxEtNombreIteration(struct evaluationIA evaluationPossibilite
     }
 }
 
-struct coordonnees selectionAuHasardPossibiliteAvecNoteMax(struct evaluationIA evaluationPossibilites[8][8],int noteMax,int nombreNoteMax){
+struct coordonnees selectionAuHasardPossibiliteAvecNoteMax(struct evaluationIA evaluationPossibilites[8][8],int noteMax,int nombreNoteMax){ //On selectionne la note max et on fait un random si elle est présente plusieurs fois
     struct coordonnees meilleurDeplacement;
     int i,j, choix, avancement=0;
 
@@ -136,7 +136,7 @@ struct coordonnees selectionAuHasardPossibiliteAvecNoteMax(struct evaluationIA e
 
 
 
-void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],struct coordonnees meilleurDeplacement,int joueurQuiJoue){
+void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],struct coordonnees meilleurDeplacement,int joueurQuiJoue){ // déplacement du pion au "meilleur déplacement"
 
     emplacementPions[meilleurDeplacement.y][meilleurDeplacement.x]=0;
     emplacementPions[ evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.y ][ evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.x ]=joueurQuiJoue+(joueurQuiJoue-1);
@@ -148,3 +148,6 @@ void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,int empl
     affichagePions(rendererWindow,emplacementPions, evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.x , evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.y );
     SDL_RenderPresent(rendererWindow);
 }
+
+
+// IA ok car Victor perd contre 1 fois sur 2.....

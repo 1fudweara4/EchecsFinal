@@ -39,12 +39,12 @@ void affichageAvatar(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar);
 int evenementMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton, SDL_Rect* CaractAvatar,struct Pseudo Nom[2], int nombreDeJoueur);
 int actionMOUSEBUTTONUPMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton, SDL_Rect* CaractAvatar,struct Pseudo Nom[2],int nombreDeJoueur,int* NombrePseudoEntree,int* Avancement,int* Action,int* avatarSelectionne);
 int verificationCliqueBouttonValiderMenuSelectionPseudo(SDL_Renderer* rendererWindow, SDL_Rect* CaractBoutton,SDL_Rect* CaractAvatar,struct Pseudo Nom[2],int nombreDeJoueur,int* NombrePseudoEntree,int* Avancement,int* Action,int* avatarSelectionne);
-void verificationCliqueSurPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar, struct Pseudo Nom[2],int NombrePseudoEntree,int* avatarSelectionne);
+void verificationCliqueSurAvatar(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar, struct Pseudo Nom[2],int NombrePseudoEntree,int* avatarSelectionne);
 void actualisationRectanglesAvatar(SDL_Renderer* rendererWindow,SDL_Rect* CaractAvatar,int AvatarSelectionne);
 void modifierStructPseudoEnFonctionAvatar(struct Pseudo Nom[2],int NombrePseudoEntree,int avatarSelectionne);
 void actionTEXTINPUTMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Event event, struct Pseudo Nom[2],int NombrePseudoEntree,int* Avancement);
 void actionKEYDOWNMenuSelectionPseudo(SDL_Renderer* rendererWindow,SDL_Rect* CaractBoutton, SDL_Event event,struct Pseudo Nom[2],int NombrePseudoEntree,int* Avancement);
-void issueMenuMenuSelectionPseudo(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int Action);
+void issueMenuSelectionPseudo(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int Action);
 
 int QuitterAppuieCroixOuEchap(SDL_Event event);
 void PauseEnfonctionDureeExecution(Uint32 Timer);

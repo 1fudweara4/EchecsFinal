@@ -65,7 +65,7 @@ void initSDLimage(){ //Init SDL image
     }
 }
 
-void recuperationDeLaResolution(int* SCREEN_WIDTH,int* SCREEN_HEIGHT){
+void recuperationDeLaResolution(int* SCREEN_WIDTH,int* SCREEN_HEIGHT){ // Lit dans fichier la definition. SI pas de fichier 640*480 par defaut
     FILE* fichierDefinition=fopen("DAT/settings.dat","r");
     struct coordonnees tailleFenetre;
     if(fichierDefinition==NULL){
@@ -91,7 +91,7 @@ void verificationErreurFenetre(SDL_Window* window){ // Vérification erreur Fene
     SDL_Delay(30);
 }
 
-void mettreIconeProgramme(SDL_Window* window){
+void mettreIconeProgramme(SDL_Window* window){ // Met un icone au programme ( fonctionne bizarrement ... )
 
     SDL_Surface *surface=IMG_Load("DAT/Image/icone.png");
     SDL_SetWindowIcon(window, surface);

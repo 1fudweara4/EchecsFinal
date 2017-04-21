@@ -1,5 +1,6 @@
 Patchnotes:
 
+-1.2.1: Corrections de bugs
 -1.2: Ajout possibilité d'avancer les pions de deux cases pour "la rangée centrale des pions".
 -1.1.1: Correction bugs et ajout des commentaires dans le code.
 -1.1 : Ajout de pseudos dans le jeu et corrections de bugs.

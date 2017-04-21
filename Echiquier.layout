@@ -2,14 +2,29 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="echiquier.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2782" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="header/outils.h" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="116" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2687" topLine="29" />
+		</Cursor>
+	</File>
+	<File name="outils.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1741" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="header/lib.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="385" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="header/menus.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3734" topLine="22" />
 		</Cursor>
 	</File>
 	<File name="header/main.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -17,24 +32,63 @@
 			<Cursor1 position="203" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="header/jeuOrdinateur.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="echiquier.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="0" />
+			<Cursor1 position="25848" topLine="0" />
 		</Cursor>
+		<Folding>
+			<Collapse line="7" />
+			<Collapse line="23" />
+			<Collapse line="32" />
+			<Collapse line="65" />
+			<Collapse line="85" />
+			<Collapse line="96" />
+			<Collapse line="107" />
+			<Collapse line="118" />
+			<Collapse line="145" />
+			<Collapse line="161" />
+			<Collapse line="173" />
+			<Collapse line="196" />
+			<Collapse line="210" />
+			<Collapse line="233" />
+			<Collapse line="261" />
+			<Collapse line="268" />
+			<Collapse line="283" />
+			<Collapse line="300" />
+			<Collapse line="318" />
+			<Collapse line="347" />
+			<Collapse line="372" />
+			<Collapse line="416" />
+			<Collapse line="436" />
+			<Collapse line="448" />
+			<Collapse line="505" />
+			<Collapse line="516" />
+			<Collapse line="525" />
+			<Collapse line="544" />
+			<Collapse line="559" />
+			<Collapse line="590" />
+			<Collapse line="611" />
+			<Collapse line="625" />
+			<Collapse line="635" />
+			<Collapse line="665" />
+			<Collapse line="688" />
+			<Collapse line="703" />
+			<Collapse line="718" />
+			<Collapse line="759" />
+			<Collapse line="768" />
+			<Collapse line="787" />
+			<Collapse line="808" />
+			<Collapse line="840" />
+		</Folding>
 	</File>
-	<File name="header/lib.h" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="header/echiquier.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="299" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="header/echiquier.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1376" topLine="12" />
+			<Cursor1 position="3333" topLine="15" />
 		</Cursor>
 	</File>
 	<File name="menus.c" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="25921" topLine="262" />
+			<Cursor1 position="12037" topLine="0" />
 		</Cursor>
 		<Folding>
 			<Collapse line="7" />
@@ -54,24 +108,14 @@
 			<Collapse line="284" />
 		</Folding>
 	</File>
-	<File name="jeuOrdinateur.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="header/jeuOrdinateur.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8066" topLine="114" />
+			<Cursor1 position="885" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="outils.c" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="jeuOrdinateur.c" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="-4" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1741" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="header/menus.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3734" topLine="22" />
-		</Cursor>
-	</File>
-	<File name="main.c" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2687" topLine="95" />
+			<Cursor1 position="3559" topLine="48" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

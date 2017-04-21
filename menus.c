@@ -920,7 +920,7 @@ void remplirTop5(struct Statistiques stats[50],struct Statistiques top[5]){ // o
         if(strcmp(stats[i].Pseudo,"")!=0){ // si on trouve un pseudo
             for(j=0;j<5;j++){ // on parcours la struc top 5
                 if(stats[i].NombreVictoireDefaite[0]>top[j].NombreVictoireDefaite[0]){ // si le nombre de victoire est sup au nb de victoires du joueur dans top que l'on parcoure
-                    for(k=4;k>j;k--){ // On redécalle tous les suivants un cran en dessous dans le classement
+                    for(k=4;k>j;k--){ // On décalle tous les suivants un cran en dessous dans le classement
                         top[k]=top[k-1];
                     }
                     top[j].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0]; // On met le joueur dans le top

@@ -24,6 +24,7 @@ void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int nu
 void initalisationEchiquier(struct echiquier emplacementPions[8][8],int numeroPartieEnregistree){ // On init le tableau où il y a les pions
     if(numeroPartieEnregistree==0){ // Si on commence une nouvelle partie
         premierRemplissageTableauEchiquier(emplacementPions);
+        remplirPossibiliteAvancerDeDeux(emplacementPions);
     }
     else{ // sinon on reprend partie
         recuperationEchiquiersauvegarde(emplacementPions,numeroPartieEnregistree);
@@ -34,33 +35,37 @@ void premierRemplissageTableauEchiquier(struct echiquier emplacementPions[8][8])
     int i,j;
     for(i=0;i<8;i++){
         for(j=0;j<8;j++){
-                if(i<2){
-                    emplacementPions[i][j].emplacementPions=1;
-                    if(i==1){
-                        emplacementPions[i][j].possibiliteAvancerDeDeux=1;
-                    }else{
-                        emplacementPions[i][j].possibiliteAvancerDeDeux=0;
-                    }
-                    printf(" 1|");
-                }
-                else if(i>5){
-                    emplacementPions[i][j].emplacementPions=-1;
-                    if(i==6){
-                        emplacementPions[i][j].possibiliteAvancerDeDeux=1;
-                    }else{
-                        emplacementPions[i][j].possibiliteAvancerDeDeux=0;
-                    }
-                    printf("-1|");
-                }
-                else{
-                    emplacementPions[i][j].emplacementPions=0;
-                    emplacementPions[i][j].possibiliteAvancerDeDeux=0;
-                    printf(" 0|");
-                }
+            if(i<2){
+                emplacementPions[i][j].emplacementPions=1;
+                printf(" 1|");
+            }
+            else if(i>5){
+                emplacementPions[i][j].emplacementPions=-1;
+                printf("-1|");
+            }
+            else{
+                emplacementPions[i][j].emplacementPions=0;
+                printf(" 0|");
+            }
         }
         printf("\n");
     }
     printf("Echiquier rempli\n");
+}
+
+void remplirPossibiliteAvancerDeDeux(struct echiquier emplacementPions[8][8]){ // on rempli pour une nouvelle partie le tableau qui sert à voir si l'on peut déplacer le pion de deux cases en avant
+    int i,j;
+
+    for(i=0;i<8;i++){
+        for(j=0;j<8;j++){
+             if(i==1 || i==6){
+                emplacementPions[i][j].possibiliteAvancerDeDeux=1;
+            }
+            else{
+                emplacementPions[i][j].possibiliteAvancerDeDeux=0;
+            }
+        }
+    }
 }
 
 void recuperationEchiquiersauvegarde(struct echiquier emplacementPions[8][8],int numeroPartieEnregistree){ //recupération du tableau dans le fichier sauvegardeEmplacement.dat
@@ -70,10 +75,10 @@ void recuperationEchiquiersauvegarde(struct echiquier emplacementPions[8][8],int
 
     fseek(fichierAvancementDeDeux, sizeof(avancementDeDeux)*(numeroPartieEnregistree-1), SEEK_SET);
     fseek(fichierEmplacement, sizeof(emplacement)*(numeroPartieEnregistree-1), SEEK_SET); // on met le curseur à l'enplacement la partie select
-    fread(emplacement,sizeof(int),64,fichierEmplacement);
-    fread(avancementDeDeux,sizeof(int),64,fichierAvancementDeDeux);
+    fread(emplacement,sizeof(int),64,fichierEmplacement); // On passe par un tableau simple car on avait problème avec tableau à double entrée
+    fread(avancementDeDeux,sizeof(int),64,fichierAvancementDeDeux); //idem
 
-    for(i=0;i<64;i++){
+    for(i=0;i<64;i++){ // On repasse à un tableau à double entrée 8/8
         emplacementPions[i/8][i%8].emplacementPions=emplacement[i];
         emplacementPions[i/8][i%8].possibiliteAvancerDeDeux=avancementDeDeux[i];
     }
@@ -140,7 +145,6 @@ void affichageCaseCouleurEnFonctionPosition(SDL_Renderer* rendererWindow,int x,i
                 }
             }
             printf("Affichage couleur case en %d %d\n",x,y);
-
 }
 
 void affichagePions(SDL_Renderer* rendererWindow,struct echiquier emplacementPions[8][8],int x,int y){ // On affiche le pion en fonction de la valeur dans le tableau emplacementPions en x y
@@ -190,8 +194,6 @@ void affichageCarreBlanc(SDL_Renderer* rendererWindow){ // On affiche le carré 
     SDL_RenderFillRects(rendererWindow,caractCarre,2);
     SDL_SetRenderDrawColor(rendererWindow,1, 1, 1,255);
     SDL_RenderDrawRects(rendererWindow,caractCarre,2);
-
-
 }
 
 void affichageAvatarEnJeu(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],SDL_Rect* caractAvatar){ // On affiche les avatars
@@ -362,7 +364,7 @@ int actionPremierCLique(SDL_Renderer* rendererWindow,struct echiquier emplacemen
         Quitter=actionsDeplacement(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue,causeFin);
         SuppressionPropositionsDeplacement(rendererWindow,propositionDeplacement,emplacementPions);
         }
-        if(Quitter==1){
+        if(Quitter==1){ //si on veut quitter alors :
             deplacementPion(rendererWindow,emplacementPions,propositionDeplacement,positionDansEchiquier,joueurQuiJoue);
             SDL_RenderPresent(rendererWindow);
         }
@@ -405,7 +407,6 @@ void generationPropositionDeplacement(struct echiquier emplacementPions[8][8],st
             propositionDeplacement[1].y=positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x].emplacementPions;
         }
     }
-
     if(positionDansEchiquier.x>=0 && positionDansEchiquier.x<8 && positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x].emplacementPions>=0 && positionDansEchiquier.y+emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x].emplacementPions<8){
         if(emplacementPions[positionDansEchiquier.y+2*emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x].emplacementPions][positionDansEchiquier.x].emplacementPions==0 && emplacementPions[positionDansEchiquier.y][positionDansEchiquier.x].possibiliteAvancerDeDeux==1 ){
             propositionDeplacement[3].x=positionDansEchiquier.x;
@@ -717,25 +718,39 @@ void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant
 }
 
 void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2]){ // On met la victoire défaite au pseudo du joueur
-    int i,Quitter,j=0,correspondance[2]={0,0};
+    int correspondance[2]={0,0};
 
-    for(i=0;i<50;i++){ // Si le joueur est déjà présent dans le fichier alors on va ajouter la victoire/défaite
+    ajoutVictoireDefaiteSiNomPresentDansLeFichier(stats, joueurGagnant, joueurPerdant, Nom, correspondance);
+    ajoutVictoireDefaiteSiNomPasPresentDansLeFichier(stats, joueurGagnant, joueurPerdant, Nom, correspondance);
+
+}
+
+void ajoutVictoireDefaiteSiNomPresentDansLeFichier(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2],int correspondance[2]){
+    int i;
+
+    for(i=0;i<50;i++){
+            // Si le joueur est déjà présent dans le fichier alors on va ajouter la victoire/défaite
         if(strcmp(Nom[joueurGagnant].Nom,"")!=0 && strcmp(stats[i].Pseudo,Nom[joueurGagnant].Nom)==0){
             stats[i].NombreVictoireDefaite[0]=stats[i].NombreVictoireDefaite[0]+1;
             printf("Ajout 1 victoire a %s. Mtn %d victoire(s)\n",stats[i].Pseudo,stats[i].NombreVictoireDefaite[0]);
             correspondance[joueurGagnant]=1;
         }
+
         if(strcmp(Nom[joueurPerdant].Nom,"")!=0 && strcmp(stats[i].Pseudo,Nom[joueurPerdant].Nom)==0){
             stats[i].NombreVictoireDefaite[1]=stats[i].NombreVictoireDefaite[1]+1;
             printf("Ajout 1 défaite a %s. Mtn %d perdu(s)\n",stats[i].Pseudo,stats[i].NombreVictoireDefaite[1]);
             correspondance[joueurPerdant]=1;
         }
+
     }
+}
+
+void ajoutVictoireDefaiteSiNomPasPresentDansLeFichier(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2], int correspondance[2]){
+    int i,j=0,Quitter;
 
     for(i=0;i<2;i++){ //sinon on ajoute a un emplacement libre le nom du jeu et sa victoire/defaite
         if(correspondance[i]==0){
-            Quitter=0;
-            j=0;
+            j=Quitter=0;
             while(!Quitter && j<50){
                 if(strcmp(stats[j].Pseudo,"")==0 && strcmp(Nom[i].Nom,"")!=0){
                     strcpy(stats[j].Pseudo,Nom[i].Nom);
@@ -756,6 +771,9 @@ void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGag
         }
     }
 }
+
+
+/** MENU DE FIN DE PARTIE **/
 
 void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante){ // menu qui apparait quand on a fini une partie
     SDL_Rect caractObjet[3];

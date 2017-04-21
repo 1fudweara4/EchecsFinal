@@ -2,6 +2,7 @@ void lancementEchiquier(SDL_Renderer* rendererWindow,struct Pseudo Nom[2],int nu
 
 void initalisationEchiquier(struct echiquier emplacementPions[8][8],int numeroPartieEnregistree);
 void premierRemplissageTableauEchiquier(struct echiquier emplacementPions[8][8]);
+void remplirPossibiliteAvancerDeDeux(struct echiquier emplacementPions[8][8]);
 void recuperationEchiquiersauvegarde(struct echiquier emplacementPions[8][8],int numeroPartieEnregistree);
 
 void affichagePartieEchiquier(SDL_Renderer* rendererWindow,struct echiquier emplacementPions[8][8],struct Pseudo Nom[2],int joueurQuiJoue);
@@ -51,6 +52,8 @@ int ajoutTourEventuelPourSauvegarde(int numeroPartieEnregistree);
 
 void ajouterVictoireDefaiteAStatistiques(struct Pseudo Nom[2], int joueurGagnant, int joueurPerdant);
 void mettreNomEtVictoireDansTableau(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2]);
+void ajoutVictoireDefaiteSiNomPresentDansLeFichier(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2],int correspondance[2]);
+void ajoutVictoireDefaiteSiNomPasPresentDansLeFichier(struct Statistiques stats[50], int joueurGagnant,int joueurPerdant,struct Pseudo Nom[2], int correspondance[2]);
 
 void menuFinDePartie(SDL_Renderer* rendererWindow,char* couleurGagnante);
 void remplirCaractMenuFinDePartie(SDL_Renderer* rendererWindow, SDL_Rect* caractObjet);

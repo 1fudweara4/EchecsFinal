@@ -62,12 +62,13 @@ void generationDeLaNote(struct echiquier emplacementPions[8][8],struct evaluatio
     }
 }
 
-void noteDeplacementHorizontaux(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]){ // On note les déplacement horizontaux, il y a les deux déplacements posisbles on va toujours prendre celui de droite (Pourquoi? Parce que.)
+void noteDeplacementHorizontaux(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]){ // On note les déplacement horizontaux
 
     if(propositionDeplacement[0].x!=-1){
 
         printf("Deplacement latéraux possibles en %d %d\n",emplacementInitial.x,emplacementInitial.y);
         evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].note=5;
+        ajoutNoteSiPionPeuFinirPartie(emplacementInitial,evaluationPossibilites, joueurQuiJoue);
         evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].meilleurDeplacementDuPion.x=propositionDeplacement[0].x;
         evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].meilleurDeplacementDuPion.y=propositionDeplacement[0].y;
     }
@@ -75,8 +76,23 @@ void noteDeplacementHorizontaux(struct echiquier emplacementPions[8][8],struct e
 
         printf("Deplacement latéraux possibles en %d %d\n",emplacementInitial.x,emplacementInitial.y);
         evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].note=5;
+        ajoutNoteSiPionPeuFinirPartie(emplacementInitial,evaluationPossibilites, joueurQuiJoue);
         evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].meilleurDeplacementDuPion.x=propositionDeplacement[2].x;
         evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].meilleurDeplacementDuPion.y=propositionDeplacement[2].y;
+    }
+}
+
+void ajoutNoteSiPionPeuFinirPartie(struct coordonnees emplacementInitial,struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue){
+
+    if(joueurQuiJoue==0){
+        if(emplacementInitial.y==1){
+            evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].note=evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].note +5;
+        }
+    }
+    else{
+        if(emplacementInitial.y==6){
+            evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].note=evaluationPossibilites[emplacementInitial.y][emplacementInitial.x].note +5;
+        }
     }
 }
 
@@ -148,6 +164,3 @@ void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,struct e
     affichagePions(rendererWindow,emplacementPions, evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.x , evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.y );
     SDL_RenderPresent(rendererWindow);
 }
-
-
-// IA ok car Victor perd contre 1 fois sur 2.....

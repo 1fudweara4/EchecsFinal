@@ -11,6 +11,7 @@ void evaluationDesPossibilites(struct echiquier emplacementPions[8][8],struct ev
 void reinitilisationPropositionDeplacement(struct coordonnees propositionDeplacement[4]);
 void generationDeLaNote(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]);
 void noteDeplacementHorizontaux(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]);
+void ajoutNoteSiPionPeuFinirPartie(struct coordonnees emplacementInitial,struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue);
 
 struct coordonnees selectionMeilleurePossibilite(struct evaluationIA evaluationPossibilites[8][8]);
 void rechercheNoteMaxEtNombreIteration(struct evaluationIA evaluationPossibilites[8][8],int* noteMax, int* nombreNoteMax);

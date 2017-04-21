@@ -5,15 +5,15 @@ struct evaluationIA{
 
 };
 
-void lancementIA(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,struct Pseudo Nom[2]);
+void lancementIA(SDL_Renderer* rendererWindow,struct echiquier emplacementPions[8][8],int joueurQuiJoue,struct Pseudo Nom[2]);
 
-void evaluationDesPossibilites(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue);
-void reinitilisationPropositionDeplacement(struct coordonnees propositionDeplacement[3]);
-void generationDeLaNote(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]);
-void noteDeplacementHorizontaux(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]);
+void evaluationDesPossibilites(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue);
+void reinitilisationPropositionDeplacement(struct coordonnees propositionDeplacement[4]);
+void generationDeLaNote(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]);
+void noteDeplacementHorizontaux(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]);
 
 struct coordonnees selectionMeilleurePossibilite(struct evaluationIA evaluationPossibilites[8][8]);
 void rechercheNoteMaxEtNombreIteration(struct evaluationIA evaluationPossibilites[8][8],int* noteMax, int* nombreNoteMax);
 struct coordonnees selectionAuHasardPossibiliteAvecNoteMax(struct evaluationIA evaluationPossibilites[8][8],int noteMax,int nombreNoteMax);
 
-void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],struct coordonnees meilleurDeplacement,int joueurQuiJoue);
+void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],struct coordonnees meilleurDeplacement,int joueurQuiJoue);

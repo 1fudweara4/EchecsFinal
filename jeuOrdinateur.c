@@ -4,7 +4,7 @@
 #include "header/jeuOrdinateur.h"
 #include "header/echiquier.h"
 
-void lancementIA(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int joueurQuiJoue,struct Pseudo Nom[2]){ //lancement de """"" l'ia""""""
+void lancementIA(SDL_Renderer* rendererWindow,struct echiquier emplacementPions[8][8],int joueurQuiJoue,struct Pseudo Nom[2]){ //lancement de """"" l'ia""""""
     struct evaluationIA evaluationPossibilites[8][8];
     struct coordonnees meilleurDeplacement;
 
@@ -17,14 +17,14 @@ void lancementIA(SDL_Renderer* rendererWindow,int emplacementPions[8][8],int jou
     deplacementPionEnMeilleurePossibilite(rendererWindow, emplacementPions,evaluationPossibilites,meilleurDeplacement,joueurQuiJoue);
 }
 
-void evaluationDesPossibilites(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue){ //on met une note a a tous les pions de notre couleur en fonction des déplacements possibles et on met ce déplacement dans une variable
+void evaluationDesPossibilites(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue){ //on met une note a a tous les pions de notre couleur en fonction des déplacements possibles et on met ce déplacement dans une variable
     int i,j;
-    struct coordonnees emplacementInitial, propositionDeplacement[3];
+    struct coordonnees emplacementInitial, propositionDeplacement[4];
 
     for(i=0;i<8;i++){
         for(j=0;j<8;j++){
             reinitilisationPropositionDeplacement(propositionDeplacement);
-            if(emplacementPions[i][j]==joueurQuiJoue){
+            if(emplacementPions[i][j].emplacementPions==joueurQuiJoue){
                 emplacementInitial.x=j;
                 emplacementInitial.y=i;
                 generationPropositionDeplacement(emplacementPions,emplacementInitial,propositionDeplacement,joueurQuiJoue);
@@ -37,15 +37,15 @@ void evaluationDesPossibilites(int emplacementPions[8][8],struct evaluationIA ev
     }
 }
 
-void reinitilisationPropositionDeplacement(struct coordonnees propositionDeplacement[3]){
+void reinitilisationPropositionDeplacement(struct coordonnees propositionDeplacement[4]){
     int i;
-    for(i=0;i<3;i++){
+    for(i=0;i<4;i++){
          propositionDeplacement[i].x=-1;
          propositionDeplacement[i].y=-1;
     }
 }
 
-void generationDeLaNote(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]){ // On génére la note en fonction de certains paramètres
+void generationDeLaNote(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]){ // On génére la note en fonction de certains paramètres
 
     if(propositionDeplacement[0].x!=-1 || propositionDeplacement[2].x!=-1){
             noteDeplacementHorizontaux(emplacementPions,evaluationPossibilites,joueurQuiJoue,emplacementInitial,propositionDeplacement);
@@ -62,7 +62,7 @@ void generationDeLaNote(int emplacementPions[8][8],struct evaluationIA evaluatio
     }
 }
 
-void noteDeplacementHorizontaux(int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[3]){ // On note les déplacement horizontaux, il y a les deux déplacements posisbles on va toujours prendre celui de droite (Pourquoi? Parce que.)
+void noteDeplacementHorizontaux(struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],int joueurQuiJoue,struct coordonnees emplacementInitial, struct coordonnees propositionDeplacement[4]){ // On note les déplacement horizontaux, il y a les deux déplacements posisbles on va toujours prendre celui de droite (Pourquoi? Parce que.)
 
     if(propositionDeplacement[0].x!=-1){
 
@@ -136,10 +136,10 @@ struct coordonnees selectionAuHasardPossibiliteAvecNoteMax(struct evaluationIA e
 
 
 
-void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,int emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],struct coordonnees meilleurDeplacement,int joueurQuiJoue){ // déplacement du pion au "meilleur déplacement"
+void deplacementPionEnMeilleurePossibilite(SDL_Renderer* rendererWindow,struct echiquier emplacementPions[8][8],struct evaluationIA evaluationPossibilites[8][8],struct coordonnees meilleurDeplacement,int joueurQuiJoue){ // déplacement du pion au "meilleur déplacement"
 
-    emplacementPions[meilleurDeplacement.y][meilleurDeplacement.x]=0;
-    emplacementPions[ evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.y ][ evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.x ]=joueurQuiJoue+(joueurQuiJoue-1);
+    emplacementPions[meilleurDeplacement.y][meilleurDeplacement.x].emplacementPions=0;
+    emplacementPions[ evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.y ][ evaluationPossibilites[meilleurDeplacement.y][meilleurDeplacement.x].meilleurDeplacementDuPion.x ].emplacementPions=joueurQuiJoue+(joueurQuiJoue-1);
 
     SDL_Delay(500);
     printf("Mise à jour des pions\n");

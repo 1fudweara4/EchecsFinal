@@ -320,6 +320,7 @@ void resetSauvegardes(){ //supprimer les fichiers qui servent à la sauvegarde
     remove("DAT/sauvegardeEmplacement.dat");
     remove("DAT/sauvegardeNom.dat");
     remove("DAT/sauvegardeTour.dat");
+    remove("DAT/sauvegardeAvancementDeDeux.dat");
 }
 
 void changementDefinition(SDL_Renderer* rendererWindow,int x,int y){ // sauvegarde dans le fichier settings.dat la definition mise en paramètre

@@ -1,6 +1,7 @@
 Patchnotes:
 
--1.1.1: correction bugs et ajout des commentaires dans le code
+-1.2: Ajout possibilité d'avancer les pions de deux cases pour "la rangée centrale des pions".
+-1.1.1: Correction bugs et ajout des commentaires dans le code.
 -1.1 : Ajout de pseudos dans le jeu et corrections de bugs.
 -1.0.1 : Correction de bugs.
 -1.0 : OMG OMG IL EST LA. Jeu 1 joueur disponible ! Des bugs ont également été résolu.
@@ -17,6 +18,4 @@ Patchnotes:
 -0.1.1: Correction du nom d'une fonction mal orthographiée XD lol.
 -0.1 : Version fonctionnelle du jeu, le premier au bout du damier a gagné, mode deux joueurs seulement.
 
-Fonctionnalités à venir:
-	- Amélioration IA (Prioriser finir partie)
-	- Autres ajouts surprises...
+

@@ -19,5 +19,10 @@ struct coordonnees{
 
 struct Pseudo{
     char Nom[10];
-    char avatar[50]; // Pour plus tard B)
+    char avatar[50];
+};
+
+struct echiquier{
+    int emplacementPions;
+    int possibiliteAvancerDeDeux;
 };
